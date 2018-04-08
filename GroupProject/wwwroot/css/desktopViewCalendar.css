@@ -1,0 +1,152 @@
+﻿/*Desktop View*/
+.weekCalendarDesktop > thead {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    display: flex !important;
+    border-top: 1px solid #b12212 !important;
+    border-bottom: 1px solid #b12212 !important;
+}
+    .weekCalendarDesktop > thead > tr > th {
+        border-bottom: 0px;
+    }
+.weekCalendarDesktop > thead > tr {
+    display: flex !important;
+    width: 100% !important;
+}
+
+.weekCalendarDesktop > thead > tr > th {
+    display: flex !important;
+    text-align: center !important;
+    justify-content: center !important;
+    text-transform: uppercase;
+    width: 100% !important;
+    padding:2px 2px 0px 0px !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+
+.weekCalendarDesktop > thead > tr > th.today {
+    color: #ffffff !important;
+    cursor: default !important;
+    background-color: #b12212 !important;
+    border: 0px solid transparent !important;
+    border-bottom-color: transparent !important;
+}
+
+.weekCalendarDesktop > tbody {
+    display: flex !important;
+    padding-top: 5px !important;
+}
+
+.weekCalendarDesktop > tbody > tr {
+    display: flex !important;
+    width: 100% !important;
+}
+
+.weekCalendarDesktop > tbody > tr > td {
+    width: 100% !important;
+    border-left: 1px dotted #b12212 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    border-top: 0px !important;
+}
+
+.weekCalendarDesktop > tbody > tr > td:nth-child(1) {
+    border-left: 0px !important;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div {
+    padding-left: 5px !important;
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    border-bottom: 2px dotted #b12212 !important;
+    font-weight: normal !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div.disabled {
+    color: darkgray !important;
+    cursor: default;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div:hover {
+    background-color: #dadada !important;
+    cursor: pointer;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div.disabled:hover {
+    background-color: transparent !important;
+    cursor: default;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div:active {
+    background-color: #808080 !important;
+    color: #dadada !important;
+}
+.weekCalendarDesktop > tbody > tr > td > div:active > .description{
+    color: white !important;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div.disabled:active {
+    background-color: transparent !important;
+    color: darkgray !important;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div:last-of-type {
+    border-bottom: 0px !important;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div > .substitute {
+    margin-right: 5px;
+    background: gray;
+    color: white;
+    border-radius: 50px;
+    float: right !important;
+    /*padding-left: 1px;*/
+    padding-top: 1px;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    text-align: center;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div > .waitlist {
+    margin-right: 5px;
+    border-radius: 50px;
+    background: gray;
+    float: right !important;
+    padding-top: 1px;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    text-align: center;
+    color: white !important;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div > .enrolled {
+    margin-right: 5px;
+    border-radius: 50px;
+    background: gray;
+    float: right !important;
+    padding-top: 1px;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    text-align: center;
+    color: white !important;
+}
+
+.weekCalendarDesktop > tbody > tr > td > div .description {
+    color: #a61f25;
+    font-weight: bold !important;
+}

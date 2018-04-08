@@ -1,0 +1,70 @@
+﻿<div class="box box-warning">
+    <div class="box-header with-border">
+        <h3 class="box-title"><b>Members</b></h3>
+    </div>
+    <div class="box-body" style="min-height:700px;">
+        <div class="container-fluid">
+            <div class="row">
+                <table id="membersTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>First Name</th>
+                            <th>Last Name</th>
+                            <th>Email</th>
+                            <th>Date of Birth</th>
+                            <th>Contact</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $('#membersTable').DataTable().clear();
+        $('#membersTable').DataTable().destroy();
+
+        function loadData() {
+            var ins_table = $('#membersTable').DataTable({
+                "lengthMenu": [[5, 10, 25, 50], [5, 10, 25, 50]],
+                destroy:true,
+                "pagination": true,
+                "autoWidth": false,
+                "responsive": true,
+                "processing": true,
+                "serverSide": true,
+                "deferLoading": 0,
+                "search": {
+                    "search": ""
+                },
+                'ajax': { "url": '@Url.Action("getMembers", "admin")', "type": "POST" },
+                'columns': [
+                    { "data": "firstName" },
+                    { "data": "lastName" },
+                    { "data": "email" },
+                    {
+                        data: "dateOfBirth",
+                        render: function (data, type, row) {
+                            return data.split('T')[0];
+                        }
+
+                    },
+                    {
+                        data: "phone",
+                        render: function (data, type, row) {
+                            if (data != null)
+                                return data;
+                            else
+                                return "Unavailable"
+                        }
+                    }
+                ]
+            });
+        }
+        loadData();
+    });
+</script>

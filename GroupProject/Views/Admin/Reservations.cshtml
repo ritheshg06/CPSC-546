@@ -1,0 +1,153 @@
+﻿@{
+    Dictionary<string, DateTime> DateRange = ViewBag.DateRange;
+    DateTime TodayDate = ViewBag.TodayDate;
+    List<Class> Classes = ViewBag.Classes;
+    Location Location = ViewBag.Location;
+    <script type="text/javascript">
+        var loc =@Json.Serialize(Location);
+        var instructors =@Json.Serialize(ViewBag.Instructors);
+        var week =@ViewBag.Week;
+    </script>
+}
+<div class="box box-primary">
+    <div class="box-header with-border">
+        <h3 class="box-title"><b>Reservations</b></h3>
+    </div>
+    <div class="box-body" style="min-height:700px;">
+        <div class="row">
+            <div class="col-lg-3 col-md-4">
+                <label for="LocationsFilter">Select Location</label>
+                <select class="form-control" id="LocationsFilter" name="LocationsFilter">
+                    @foreach (Location loc in ViewBag.Locations)
+                    {
+                        if (Location.LocationID == loc.LocationID)
+                        {
+
+                            <option value="@loc.LocationID" selected>@loc.LocationName</option>
+                        }
+                        else
+                        {
+
+                            <option value="@loc.LocationID">@loc.LocationName</option>
+                        }
+
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-3 col-md-3 col-sm-4">
+                <div class="ClassList">
+                    <button class="btn btn-danger btn-sm" style="display:flex;margin:0 auto;" id="resetWeek">Reset to Current Week</button>
+                    <div id="DateRangeSection">
+                        <div style="display: flex;justify-content: space-between;width:100%">
+                            <div id="prev" style="cursor:pointer;"><a id="prev"><i class="fa fa-fw fa-caret-left" style="font-size:24px;"></i></a></div>
+                            <div id="dateRange" style="font-weight:bold;line-height:26px;">@DateRange.GetValueOrDefault("Sunday").ToShortDateString() - @DateRange.GetValueOrDefault("Saturday").ToShortDateString()</div>
+                            <div id="next" style="cursor:pointer;"><a id="next"><i class="fa fa-fw fa-caret-right" style="font-size:24px;"></i></a></div>
+                        </div>
+                    </div>
+                    <div id="ClassesSection">
+                        @{
+                            foreach (KeyValuePair<string, DateTime> kv in DateRange)
+                            {
+                                <div class="ClassDate @(kv.Value.ToString("dd-MM-yyyy")==TodayDate.ToString("dd-MM-yyyy") ? "today":"")">
+                                    <day>@kv.Value.ToString("ddd") @kv.Value.ToString("MMM") @kv.Value.Day, @kv.Value.Year</day>
+                                    <div>
+                                        @{
+                                            foreach (Class c in Classes.Where(x => x.StartDate.ToString("dd-MM-yyyy") == kv.Value.ToString("dd-MM-yyyy")).ToList())
+                                            {
+
+
+
+                                                DateTime time = new DateTime(c.StartDate.Year, c.StartDate.Month, c.StartDate.Day, c.StartTime.Hours, c.StartTime.Minutes, c.StartTime.Seconds);
+                                                string displayTime = time.ToString("hh:mm tt");
+
+                                                if (time.Ticks<TodayDate.Ticks)
+                                                {
+                                                    <div class="disabled" data-classid="@c.ClassID" data-roomid="@c.ClassSchedule.RoomLayoutID">
+                                                        <time>@displayTime</time>
+                                                        <desc style="display:inline-block;width:100%;align-self:stretch;">@c.ClassType.ClassName</desc>
+                                                        <stat>(@c.Reservations.Where(x => x.ReservationStatus == 1 || x.ReservationStatus==3).Count()/@c.ClassType.MaxCapacity)</stat>
+                                                    </div>
+                                                }
+                                                else
+                                                {
+                                                    <div data-classid="@c.ClassID" data-roomid="@c.ClassSchedule.RoomLayoutID">
+                                                        <time>@displayTime</time>
+                                                        <desc style="display:inline-block;width:100%;align-self:stretch;">@c.ClassType.ClassName</desc>
+                                                        <stat>(@c.Reservations.Where(x=>x.ReservationStatus== 1 || x.ReservationStatus == 3).Count()/@c.ClassType.MaxCapacity)</stat>
+                                                    </div>
+                                                }
+                                            }
+                                        }
+                                    </div>
+                                </div>
+                                            }
+                        }
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-9 col-md-9 col-sm-8" style="padding-left:0px;">
+                <div id="ClassDetails" class="def">
+                    <h2 id="initMsg" style="margin:0 auto;text-align:center">Please select a class</h2>
+                    <div id="info" style="display:none;"></div>
+                    <div id="spots" style="display:none;"></div>
+                    <div id="actions" style="display:none;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script type="text/javascript" src="~/lib/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript" src="~/js/AdminReservationsWithRoom.js"></script>
+<script type="text/javascript" src="~/js/AdminReservationsWithoutRoom.js"></script>
+
+<script type="text/javascript">
+        $("#LocationsFilter").select2();
+        $("#ClassesSection > div.ClassDate > div").find("div").click(function () {
+            var classID = $(this).data("classid");
+            var roomID = $(this).data("roomid");
+            if (roomID != 0)
+                RenderClassDetailsWithLayout(classID, roomID);
+            else
+                RenderClassDetailsWithoutLayout(classID);
+        });
+        $("#LocationsFilter").on("change", function () {
+            l = $(this).val();
+            $.ajax({
+                url: "@Url.Action("reservations", "admin")",
+                data: { locationID: l },
+                success: function (data) {
+                    $("#MainContainer").html(data);
+                }
+            });
+        });
+        $("#prev").click(function () {
+            $.ajax({
+                url: "@Html.Raw(Url.Action("reservations", "admin", new { locationID = Location.LocationID, Week=ViewBag.Week-1 }))",
+                success: function (data) {
+                    $("#MainContainer").html(data);
+                }
+            });
+        });
+
+        $("#next").click(function () {
+            $.ajax({
+                url: "@Html.Raw(Url.Action("reservations", "admin", new { locationID = Location.LocationID, Week=ViewBag.Week+1 }))",
+                success: function (data) {
+                    $("#MainContainer").html(data);
+                }
+            });
+        });
+
+        $("#resetWeek").click(function () {
+            $.ajax({
+                url: "@Html.Raw(Url.Action("reservations", "admin", new { locationID = Location.LocationID }))",
+                success: function (data) {
+                    $("#MainContainer").html(data);
+                }
+            });
+        });
+</script>

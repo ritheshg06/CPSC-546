@@ -1,0 +1,188 @@
+﻿@model Location;
+<div class="container-fluid">
+    <div class="row" style="margin-bottom:10px;">
+        <div class="col-lg-4 col-md-4" style="padding-left: 11px;">
+            <h3 style="margin:0px;margin-top:6px;">Update Location Detail</h3>
+        </div>
+        <div class="col-lg-4 col-md-4">
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <button data-toggle="modal" data-target="#modal-warning" data-backdrop="false" type="button" class="btn btn-block btn-primary " style="float:right;max-width:150px;"><i class="fa  fa-angle-double-left"></i> Back to Locations</button>
+        </div>
+    </div>
+    <div class="row">
+        <form id="EditLocationForm" role="form">
+            <input type="hidden" id="locationID" name="locationID" value="@Model.LocationID" />
+            <div class="box-body">
+                <h4><span class="label label-danger">Location Information</span></h4>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-6">
+                                <label for="locationName">Location Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-map-marker"></i></span>
+                                    <input type="text" class="form-control" id="locationName" name="locationName" placeholder="Enter Location Name" value="@Model.LocationName">
+                                </div>
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group row">
+                            <div class="col-lg-3 col-md-4">
+                                <label for="addressLine1">Address Line 1</label>
+                                <input type="text" class="form-control" id="addressLine1" name="addressLine1" placeholder="Enter Address Line 1" value="@Model.AddressLine1">
+                            </div>
+                            <div class="col-lg-3 col-md-4">
+                                <label for="addressLine2">Address Line 2</label>
+                                <input type="text" class="form-control" id="addressLine2" name="addressLine2" placeholder="Enter Address Line 2" value="@Model.AddressLine2">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="city">City</label>
+                                <input type="text" class="form-control" id="city" name="city" placeholder="Enter City" value="@Model.City">
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label for="state">State</label>
+                                <input type="text" class="form-control" id="state" name="state" placeholder="Enter State" value="@Model.State">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="country">Country</label>
+                                <input type="text" class="form-control" id="country" name="country" placeholder="Enter Country" value="@Model.Country">
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label for="pincode">Zip Code</label>
+                                <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Enter Zip Code" value="@Model.Pincode">
+                            </div>
+                        </div>
+                        <hr />
+                        <div class="form-group row">
+                            <div class="col-lg-3 col-md-4">
+                                <label for="timeZone">TimeZone</label>
+                                <select class="form-control" id="timeZone" name="timeZone">
+                                    @foreach (TimeZoneInfo info in TimeZoneInfo.GetSystemTimeZones())
+                                    {
+                                        if (Model.TimeZone == info.Id)
+                                        {
+                                            <option value="@info.Id" selected>@info.DisplayName</option>
+                                        }
+                                        else
+                                        {
+                                            <option value="@info.Id">@info.DisplayName</option>
+                                        }
+
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-info"><i class="fa fa-save"></i> Save Details</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal modal-warning fade" id="modal-warning">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Attention!</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to go back to Locations Page ?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa fa-times-circle"></i><div>No</div></button>
+                <button id="BackToLocations" type="button" data-dismiss="modal" class="btn btn-outline"><i class="fa fa-check-circle"></i><div>Yes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal modal-info fade" id="modal-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Update Location Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Do you want to verify the information, or continue saving the changes?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="VerifyBtn" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa  fa-angle-double-left"></i><div>Verify</div></button>
+                <button id="SaveLocation" type="button" class="btn btn-outline"><i class="fa fa-check"></i><div>Save changes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript">
+    $(document).ready(function () {
+        
+        $('#timeZone').select2({
+            placeholder:"Select TimeZone"
+        });
+
+        $("#BackToLocations").click(function () {
+            $.ajax({
+                url: "@Url.Action("locations", "admin")",
+                success: function (data) {
+                    $('body').removeClass('modal-open');
+                    $("body").css("padding-right", "0px");
+                    $(".modal-backdrop").remove();
+                    $("#locations").html(data);
+                }
+            });
+        });
+
+        $("#SaveLocation").click(function () {
+            $("#VerifyBtn").attr("disabled", "disabled");
+            $("#SaveLocation").attr("disabled","disabled");
+            $("#SaveLocation i").removeClass("fa-check");
+            $("#SaveLocation i").addClass("fa-spinner fa-pulse fa-fw");
+            $("#SaveLocation div").text("Saving Changes");
+            $.ajax({
+                url: "@Url.Action("updateLocation", "admin")",
+                method: 'POST',
+                data: $('#EditLocationForm').serialize(),
+                async: true,
+                success: function (data) {
+                    if (data == true) {
+                        $("#SaveLocation i").removeClass("fa-spinner fa-pulse fa-fw");
+                        $("#SaveLocation i").addClass("fa-check");
+                        $("#SaveLocation div").text("Saved Changes");
+                        $("#SaveLocation").removeAttr("disabled");
+                        $("#VerifyBtn").removeAttr("disabled");
+                        setTimeout(function () {
+                            $.ajax({
+                                url: "@Url.Action("locations", "admin")",
+                                success: function (data) {
+                                    $('body').removeClass('modal-open');
+                                    $("body").css("padding-right","0px");
+                                    $(".modal-backdrop").remove();
+                                    $("#locations").html(data);
+                                }
+                            });
+                        }, 2000);
+
+                    }
+                }
+            });
+        });
+    });
+</script>

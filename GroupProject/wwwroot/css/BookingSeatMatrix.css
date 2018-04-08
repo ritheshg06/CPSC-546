@@ -1,0 +1,145 @@
+﻿/********** CSS FOR SPOT RESERVATION TABLE*********/
+
+#BookingSeatsMatrix {
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+    #BookingSeatsMatrix fan,
+    #BookingSeatsMatrix tv,
+    #BookingSeatsMatrix speaker,
+    #BookingSeatsMatrix instructor
+    {
+        display: flex;
+        width: 100%;
+        height: 100%;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #BookingSeatsMatrix.table {
+        width: auto !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+        -khtml-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+    }
+
+        #BookingSeatsMatrix.table > tbody > tr > td {
+            min-width: 45px !important;
+            height: 45px !important;
+            text-align: center !important;
+            align-content: center !important;
+            vertical-align: middle !important;
+            /*border-left: 1px solid transparent;*/
+            padding: 0px !important;
+            /*border-top-color: transparent !important;*/
+            border: 0px solid transparent !important;
+        }
+
+            #BookingSeatsMatrix.table > tbody > tr > td.padded {
+                padding: 5px !important;
+            }
+
+            #BookingSeatsMatrix.table > tbody > tr > td:last-child {
+                border-right: 1px solid transparent !important;
+            }
+
+        #BookingSeatsMatrix.table > tbody > tr:last-child > td {
+            border-bottom: 1px solid transparent !important;
+        }
+
+        #BookingSeatsMatrix.table > tbody > tr > td > a {
+            display: flex;
+            height: 40px;
+            width: 40px;
+            margin: 0 auto;
+            background-color: white;
+            text-align: center;
+            border-radius: 50%;
+            border: 1px #333333 solid;
+            color: black;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: 400;
+            font-size: 14px;
+        }
+
+            #BookingSeatsMatrix.table > tbody > tr > td > a.square {
+                border-radius: 0% !important;
+                height: 45px;
+                width: 45px;
+            }
+
+            #BookingSeatsMatrix.table > tbody > tr > td > a:hover {
+                color: white;
+                background-color: #333333;
+            }
+
+            #BookingSeatsMatrix.table > tbody > tr > td > a.moveTo {
+                color: black;
+                background-color: blanchedalmond !important;
+            }
+
+                #BookingSeatsMatrix.table > tbody > tr > td > a.moveTo:hover {
+                    background-color: lightcyan !important;
+                }
+
+        #BookingSeatsMatrix.table > tbody > tr > td > div.disabled {
+            background: #888888;
+            height: 40px;
+            width: 40px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: black;
+            border: 1px #888888 solid;
+            font-weight: 400;
+            border-radius: 50%;
+            font-size: 14px;
+        }
+
+tv.highlighted,
+instructor.highlighted,
+fan.highlighted,
+speaker.highlighted {
+    color: white !important;
+}
+
+.material-icons {
+    color: #666666;
+}
+
+    .material-icons.md-18 {
+        font-size: 18px;
+    }
+
+    .material-icons.md-24 {
+        font-size: 24px;
+    }
+
+    .material-icons.md-36 {
+        font-size: 36px;
+    }
+
+    .material-icons.md-48 {
+        font-size: 48px;
+    }
+
+.fa.fa-user {
+    color: #666666;
+}
+
+.stick {
+    position: fixed;
+    top: 0px;
+}

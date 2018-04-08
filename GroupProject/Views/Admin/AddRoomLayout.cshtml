@@ -1,0 +1,270 @@
+﻿<div class="container-fluid">
+    <div class="row" style="margin-bottom:10px;">
+        <div class="col-lg-4 col-md-4" style="padding-left: 11px;">
+            <h3 style="margin:0px;margin-top:6px;">Add Room Layout</h3>
+        </div>
+        <div class="col-lg-4 col-md-4">
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <button data-toggle="modal" data-target="#backToRoomLayoutsModal" data-backdrop="false" type="button" class="btn btn-block btn-primary " style="float:right;max-width:180px;"><i class="fa fa-angle-double-left"></i> Back to Room Layouts</button>
+        </div>
+    </div>
+    <div class="row">
+        <form id="NewRoomLayoutForm" role="form">
+            <input type="hidden" id="SeatMatrix" name="SeatMatrix" />
+            <div class="box-body">
+                <h4><span class="label label-danger">Room Layout Information</span></h4>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="form-group row">
+                            <div class="col-lg-3 col-md-4">
+                                <label for="roomName">Room Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-table"></i></span>
+                                    <input type="text" class="form-control" id="roomName" name="roomName" placeholder="Enter Room Layout Name">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4">
+                                <label for="locationID">Select Location</label>
+                                <select class="form-control" id="locationID" name="locationID">
+                                    @foreach (Location loc in ViewBag.Locations)
+                                    {
+                                        <option value="@loc.LocationID">@loc.LocationName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <label id="RowsCount" for="rows">Rows - 2</label><br/>
+                                <input type="hidden" id="rows" name="rows" value="2"/>
+                                <input type="text" id="rowSlider" value="" class="slider form-control" data-slider-min="1" data-slider-max="50"
+                                       data-slider-step="1" data-slider-orientation="horizontal" data-slider-value="2"
+                                       data-slider-selection="before" data-slider-tooltip="show" data-slider-id="red">
+                            </div>
+                            <div class="col-lg-12 col-md-12 col-sm-12">
+                                <label id="ColumnsCount" for="columns">Columns - 2</label><br />
+                                <input type="hidden" id="columns" name="columns" value="2"/>
+                                <input type="text" id="columnSlider" value="" class="slider form-control" data-slider-min="1" data-slider-max="50"
+                                       data-slider-step="1" data-slider-orientation="horizontal" data-slider-value="2"
+                                       data-slider-selection="before" data-slider-tooltip="show" data-slider-id="red">
+                            </div>
+                        </div>
+                        <div class="form-group  row">
+                            <div class="col-md-12">
+                                <h5>Maximum 100 Spots can be configured</h5>
+                                <h5 id="TotalSeats">Total Spots - 4 </h5>
+                                <h5 id="ConfiguredSpots">Total Configured Spots - 0</h5>
+                                <input type="hidden" id="ConfiguredSeats" name="ConfiguredSeats" />
+                            </div>
+                        </div> 
+                        <div class="form-group row margin-top-25">
+                            <div id="Seats" draggable="false" class="table-responsive col-md-12">
+                                <table id="SeatsTable" class="table" draggable="false">
+                                    <tbody draggable="false">
+                                        <tr>
+                                            <td data-column="0" data-toggle="context" data-row="0">-</td>
+                                            <td data-column="1" data-toggle="context" data-row="0">-</td>
+                                        </tr>
+                                        <tr>
+                                            <td data-column="0" data-toggle="context" data-row="1">-</td>
+                                            <td data-column="1" data-toggle="context" data-row="1">-</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#addRoomLayoutModal"><i class="fa fa-plus"></i> Add Details</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal modal-warning fade" id="backToRoomLayoutsModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Attention!</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to go back to Room Layouts Page ?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa fa-times-circle"></i><div>No</div></button>
+                <button id="BackToRoomLayouts" type="button" data-dismiss="modal" class="btn btn-outline"><i class="fa fa-check-circle"></i><div>Yes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal modal-info fade" id="addRoomLayoutModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Add Room Layout Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Do you want to verify the information, or continue saving the changes?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="VerifyBtn" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa  fa-angle-double-left"></i><div>Verify</div></button>
+                <button id="SaveRoomLayout" type="button" class="btn btn-outline"><i class="fa fa-check"></i><div>Save changes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div id="contextMenu">
+    <ul class="dropdown-menu" role="menu">
+        <li><a tabindex="-1" data-action="selectAllSeats"><i class="icon md-check-all" aria-hidden="true"></i> Select All</a></li>
+        <li><a tabindex="-1" data-action="clearSelection"><i class="icon md-grid-off" aria-hidden="true"></i> Clear Selection</a></li>
+        <li><a tabindex="-1" data-action="invertSelection"><i class="icon md-flip-to-back" aria-hidden="true"></i> Invert Selection</a></li>
+        <li class="divider"></li>
+        <li><a tabindex="-1" data-action="createCycleSeat"><i class="icon md-bike" aria-hidden="true"></i> Create Cycle Seat</a></li>
+        @*<li><a tabindex="-1" data-action="createFanSpot"><i class="icon md-toys" aria-hidden="true"></i> Create Fan Spot</a></li>*@
+        <li><a tabindex="-1" data-action="createTVSpot"><i class="icon md-tv" aria-hidden="true"></i> Create Screen</a></li>
+        <li><a tabindex="-1" data-action="createSpeakerSpot"><i class="icon md-speaker" aria-hidden="true"></i> Create Speaker Spot</a></li>
+        <li><a tabindex="-1" data-action="createInstructorSpot"><i class="icon md-account" aria-hidden="true"></i> Create Instructor Spot</a></li>
+        <li class="divider"></li>
+        <li><a tabindex="-1" data-action="clearSeat"><i class="icon md-close-circle-o" aria-hidden="true"></i> Clear Seat</a></li>
+    </ul>
+</div>
+<script type="text/javascript" src="~/lib/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript" src="~/lib/admin-lte/plugins/bootstrap-slider/bootstrap-slider.js"></script>
+<script type="text/javascript" src="~/lib/bootstrap-contextmenu/bootstrap-contextmenu.js"></script>
+<script type="text/javascript" src="~/js/createRoomlayout.js"></script>
+<script type="text/javascript">
+    $('#locationName').select2();
+    $("#BackToRoomLayouts").click(function () {
+        $.ajax({
+            url: "@Url.Action("roomLayouts", "admin")",
+            success: function (data) {
+                $('body').removeClass('modal-open');
+                $("body").css("padding-right", "0px");
+                $(".modal-backdrop").remove();
+                $("#roomLayouts").html(data);
+            }
+        });
+    });
+    $("#SaveRoomLayout").click(function () {
+        $("#VerifyBtn").attr("disabled", "disabled");
+        $("#SaveRoomLayout").attr("disabled","disabled");
+        $("#SaveRoomLayout i").removeClass("fa-check");
+        $("#SaveRoomLayout i").addClass("fa-spinner fa-pulse fa-fw");
+        $("#SaveRoomLayout div").text("Saving Changes");
+        if (ERROR.hasUniqueError()) {
+            alert("Please enter unique names for spots");
+            $(function () {
+                $('#addRoomLayoutModal').modal('toggle');
+            });
+            $("#SaveRoomLayout i").removeClass("fa-spinner fa-pulse fa-fw");
+            $("#SaveRoomLayout i").addClass("fa-check");
+            $("#SaveRoomLayout div").text("Save Changes");
+            $("#SaveRoomLayout").removeAttr("disabled");
+            $("#VerifyBtn").removeAttr("disabled");
+            return;
+        }
+        else {
+            var rows = $("#SeatsTable tbody tr").length;
+            var columns = $("#SeatsTable tbody tr:last td").length;
+            var Matrix = [];
+            for (var i = 0; i < rows; i++) {
+                for (var j = 0; j < columns; j++) {
+                    var element = $('#SeatsTable tr:eq(' + i + ') td:eq(' + j + ')')
+                    var strval = $(element).html();
+
+                    if (strval.indexOf("<cycle>") > -1) {
+                        var obj = new Object();
+                        obj["SN"] = $(element).find("input").val();
+                        obj["R"] = i;
+                        obj["C"] = j;
+                        obj["S"] = "C";
+                        Matrix[Matrix.length] = obj;
+                    } else if (strval.indexOf("<cycle class=\"undermaintenance\">") > -1) {
+                        var obj = new Object();
+                        obj["SN"] = $(element).find("input").val();
+                        obj["R"] = i;
+                        obj["C"] = j;
+                        obj["S"] = "M";
+                        Matrix[Matrix.length] = obj;
+                    } else if (strval.indexOf("<fan>") > -1) {
+                        var obj = new Object();
+                        obj["S"] = "fan";
+                        obj["R"] = i;
+                        obj["C"] = j;
+                        Matrix[Matrix.length] = obj;
+                    }
+                    else if (strval.indexOf("<tv>") > -1) {
+                        var obj = new Object();
+                        obj["S"] = "tv";
+                        obj["R"] = i;
+                        obj["C"] = j;
+                        Matrix[Matrix.length] = obj;
+                    }
+                    else if (strval.indexOf("<speaker>") > -1) {
+                        var obj = new Object();
+                        obj["S"] = "speaker";
+                        obj["R"] = i;
+                        obj["C"] = j;
+                        Matrix[Matrix.length] = obj;
+                    }
+                    else if (strval.indexOf("<instructor>") > -1) {
+                        var obj = new Object();
+                        obj["S"] = "instructor";
+                        obj["R"] = i;
+                        obj["C"] = j;
+                        Matrix[Matrix.length] = obj;
+                    }
+                    else {
+
+                        var obj = new Object();
+                        obj = "-";
+                        Matrix[Matrix.length] = obj;
+                    }
+                }
+            }
+            $.when($("#SeatMatrix").val(JSON.stringify(Matrix))).done(function () {
+                $.ajax({
+                    url: "@Url.Action("addRoomLayout", "admin")",
+                    method: 'POST',
+                    data: $('#NewRoomLayoutForm').serialize(),
+                    async: true,
+                    success: function (data) {
+                        if (data == true) {
+                            $("#SaveRoomLayout i").removeClass("fa-spinner fa-pulse fa-fw");
+                            $("#SaveRoomLayout i").addClass("fa-check");
+                            $("#SaveRoomLayout div").text("Saved Changes");
+                            $("#SaveRoomLayout").removeAttr("disabled");
+                            $("#VerifyBtn").removeAttr("disabled");
+                            setTimeout(function () {
+                                $.ajax({
+                                    url: "@Url.Action("roomLayouts", "admin")",
+                                    success: function (data) {
+                                        $('body').removeClass('modal-open');
+                                        $("body").css("padding-right","0px");
+                                        $(".modal-backdrop").remove();
+                                        $("#roomLayouts").html(data);
+                                    }
+                                });
+                            }, 2000);
+
+                        }
+                    }
+                });
+            });
+        }
+    });
+</script>

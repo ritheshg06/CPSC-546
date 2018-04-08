@@ -1,0 +1,14 @@
+﻿<Properties StartupConfiguration="{252C0359-B50C-48B4-85DD-B90106E093F8}|Default">
+  <MonoDevelop.Ide.Workbench ActiveDocument="GroupProject Status">
+    <Files>
+      <File FileName="GroupProject Status" />
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.GroupProject PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MultiItemStartupConfigurations />
+</Properties>

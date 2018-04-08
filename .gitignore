@@ -1,0 +1,7 @@
+.vs/**
+.vs/config/applicationhost.config
+.vs/GroupProject/v15/.suo
+.vs/GroupProject/v15/sqlite3/storage.ide
+.vs/GroupProject/v15/sqlite3/**
+GroupProject/bin
+GroupProject/obj

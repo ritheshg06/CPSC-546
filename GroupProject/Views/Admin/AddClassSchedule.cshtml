@@ -1,0 +1,284 @@
+﻿<div class="container-fluid">
+    <div class="row" style="margin-bottom:10px;">
+        <div class="col-lg-4 col-md-4" style="padding-left: 11px;">
+            <h3 style="margin:0px;margin-top:6px;">Add Class Schedule</h3>
+        </div>
+        <div class="col-lg-4 col-md-4">
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <button data-toggle="modal" data-target="#modal-warning" data-backdrop="false" type="button" class="btn btn-block btn-primary " style="float:right;max-width:180px;"><i class="fa fa-angle-double-left"></i> Back to Class Types</button>
+        </div>
+    </div>
+    <div class="row">
+        <form id="NewClassScheduleForm" role="form">
+            <div class="box-body">
+                <h4><span class="label label-danger">Class Schedule Information</span></h4>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="form-group row">
+                            <div class="col-lg-3 col-md-4">
+                                <label for="ScheduleName">Schedule Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa fa-calendar-check-o"></i></span>
+                                    <input type="text" class="form-control" id="ScheduleName" name="ScheduleName" placeholder="Enter Schedule Name">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4">
+                                <label for="classTypeID">Select Class Type</label>
+                                <select class="form-control" id="classTypeID" name="classTypeID">
+                                    @foreach (ClassType t in ViewBag.ClassTypes)
+                                    {
+                                        <option data-location="@t.LocationID" value="@t.ClassTypeID">@t.ClassName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="col-lg-3 col-md-4">
+                                <label for="roomLayoutID">Select Room Layout</label>
+                                <select class="form-control" id="roomLayoutID" name="roomLayoutID">
+                                    <option value="0">None</option>
+                                    @*@foreach (RoomLayout r in ViewBag.RoomLayouts)
+                                    {
+                                        <option data-location="@r.Location.LocationName" value="@r.RoomLayoutID">@r.RoomName</option>
+                                    }*@
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="startDate">Start Date</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="startDate" name="startDate">
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label for="endDate">End Date</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control pull-right" id="endDate" name="endDate">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3 bootstrap-timepicker">
+                                <label for="startTime">Start Time</label>
+                                <div class="input-group">
+                                    <input type="text" id="startTime" name="startTime" class="form-control timepicker">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-3 bootstrap-timepicker">
+                                <label for="endTime">End Time</label>
+                                <div class="input-group">
+                                    <input type="text" id="endTime" name="endTime" class="form-control timepicker">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-clock-o"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
+                                <h5 class="form-label">Days</h5>
+                                <div class="controls">
+                                    @*<div class="btn-group"  role="group">*@
+                                        <div class="checkbox icheck displayInlineBlock">
+                                            <label>
+                                                <input type="checkbox" name="selectedDays[]" id="Sun" value="Sun" checked /> Sun
+                                            </label>
+                                        </div>
+                                        <div class="checkbox icheck displayInlineBlock">
+                                            <label>
+                                                <input type="checkbox" name="selectedDays[]" id="Mon" value="Mon" /> Mon
+                                            </label>
+                                        </div>
+                                        <div class="checkbox icheck displayInlineBlock">
+                                            <label>
+                                                <input type="checkbox" name="selectedDays[]" id="Tue" value="Tue" /> Tue
+                                            </label>
+                                        </div>
+                                        <div class="checkbox icheck displayInlineBlock">
+                                            <label>
+                                                <input type="checkbox" name="selectedDays[]" id="Wed" value="Wed" /> Wed
+                                            </label>
+                                        </div>
+                                        <div class="checkbox icheck displayInlineBlock">
+                                            <label>
+                                                <input type="checkbox" name="selectedDays[]" id="Thu" value="Thu" /> Thu
+                                            </label>
+                                        </div>
+                                        <div class="checkbox icheck displayInlineBlock">
+                                            <label>
+                                                <input type="checkbox" name="selectedDays[]" id="Fri" value="Fri" /> Fri
+                                            </label>
+                                        </div>
+                                        <div class="checkbox icheck displayInlineBlock">
+                                            <label>
+                                                <input type="checkbox" name="selectedDays[]" id="Sat" value="Sat" /> Sat
+                                            </label>
+                                        </div>
+                                    @*</div>*@
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-info"><i class="fa fa-plus"></i> Add Details</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal modal-warning fade" id="modal-warning">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Attention!</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to go back to Class Schedules Page ?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa fa-times-circle"></i><div>No</div></button>
+                <button id="BackToClassSchedules" type="button" data-dismiss="modal" class="btn btn-outline"><i class="fa fa-check-circle"></i><div>Yes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal modal-info fade" id="modal-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Add Class Schedule Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Do you want to verify the information, or continue saving the changes?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="VerifyBtn" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa  fa-angle-double-left"></i><div>Verify</div></button>
+                <button id="SaveClassSchedule" type="button" class="btn btn-outline"><i class="fa fa-check"></i><div>Save changes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<script type="text/javascript" src="~/lib/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript" src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="~/lib/admin-lte/plugins/timepicker/bootstrap-timepicker.min.js"></script>
+<script type="text/javascript">
+    $("#classTypeID").select2();
+    $("#roomLayoutID").select2();
+
+    var loadLayouts = function (loc) { 
+        var locations = null;
+        $.ajax({
+            url: "admin/getroomlayoutsbylocation?locationID=" + loc,
+            success: function (response) {
+                locations = response;
+            }
+        }).then(function () {
+            $("#roomLayoutID").select2('destroy');
+            $("#roomLayoutID option").remove();
+            var data = [];
+            data.push({ id: 0, text: "None" });
+            $.each(locations, function (i, e) {
+                data.push({ id: e.roomLayoutID, text: e.roomName });
+            });
+            $("#roomLayoutID").select2({
+                data: data
+            });
+        });
+       
+    };
+    var l = $('#classTypeID').find(':selected').data("location");
+    loadLayouts(l);
+
+    $('#classTypeID').on("change", function (e) {
+        var loc = $("#classTypeID").select2().find(":selected").data("location");
+        loadLayouts(loc);
+    });
+
+    $('input[type="checkbox"], input[type="radio"]').iCheck({
+        checkboxClass: 'icheckbox_square-red',
+        radioClass: 'iradio_square-red',
+    });
+    //Date picker
+    $('#startDate').datepicker({
+        autoclose: true,
+        format: "yyyy-mm-dd"
+    });
+    $('#endDate').datepicker({
+        autoclose: true,
+        format: "yyyy-mm-dd"
+    });
+
+    $('.timepicker').timepicker({
+        showInputs: false,
+        showMeridian: false,
+    });
+
+    $("#BackToClassSchedules").click(function () {
+        $.ajax({
+            url: "@Url.Action("classSchedules", "admin")",
+            success: function (data) {
+                $('body').removeClass('modal-open');
+                $("body").css("padding-right", "0px");
+                $(".modal-backdrop").remove();
+                $("#MainContainer").html(data);
+            }
+        });
+    });
+    $("#SaveClassSchedule").click(function () {
+        $("#VerifyBtn").attr("disabled", "disabled");
+        $("#SaveClassSchedule").attr("disabled","disabled");
+        $("#SaveClassSchedule i").removeClass("fa-check");
+        $("#SaveClassSchedule i").addClass("fa-spinner fa-pulse fa-fw");
+        $("#SaveClassSchedule div").text("Saving Changes");
+        var formData = $('#NewClassScheduleForm').serialize();
+        $.ajax({
+            url: "@Url.Action("addClassSchedule", "admin")",
+            method: 'POST',
+            data: formData,
+            async: true,
+            success: function (data) {
+                if (data == true) {
+                    $("#SaveClassSchedule i").removeClass("fa-spinner fa-pulse fa-fw");
+                    $("#SaveClassSchedule i").addClass("fa-check");
+                    $("#SaveClassSchedule div").text("Saved Changes");
+                    $("#SaveClassSchedule").removeAttr("disabled");
+                    $("#VerifyBtn").removeAttr("disabled");
+                    setTimeout(function () {
+                        $.ajax({
+                            url: "@Url.Action("classSchedules", "admin")",
+                            success: function (data) {
+                                $('body').removeClass('modal-open');
+                                $("body").css("padding-right","0px");
+                                $(".modal-backdrop").remove();
+                                $("#MainContainer").html(data);
+                            }
+                        });
+                    }, 2000);
+        
+                }
+            }
+        });
+    });
+</script>

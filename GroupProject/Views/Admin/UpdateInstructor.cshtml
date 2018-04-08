@@ -1,0 +1,350 @@
+﻿@model Instructor;
+<div class="container-fluid">
+    <div class="row" style="margin-bottom:10px;">
+        <div class="col-lg-4 col-md-4" style="padding-left: 11px;">
+            <h3 style="margin:0px;;margin-top:6px;">Update Instructor's Detail</h3>
+        </div>
+        <div class="col-lg-4 col-md-4">
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <button data-toggle="modal" data-target="#modal-warning" data-backdrop="false" type="button" class="btn btn-block btn-primary " style="float:right;max-width:150px;"><i class="fa  fa-angle-double-left"></i> Back to Instructors</button>
+        </div>
+    </div>
+    <div class="row">
+        <form id="EditInstructorForm" role="form">
+            <input type="hidden" id="userID" name="userID" value="@Model.UserID"/>
+            <div class="box-body">
+                <h4><span class="label label-danger">Personal Information</span></h4>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-6">
+                                <label for="firstName">First Name &amp; Last Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-user"></i></span>
+                                    <input type="text" class="form-control" id="firstName" name="firstName" placeholder="Enter First Name" value="@Model.FirstName">
+                                    <span class="input-group-addon"><b>&amp;</b></span>
+                                    <input type="text" class="form-control" id="lastName" name="lastName" placeholder="Enter Last Name" value="@Model.LastName">
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label for="dateOfBirth">Date of Birth</label>
+                                <div class="input-group date">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-calendar"></i>
+                                    </div>
+                                    <input type="text" class="form-control datepicker pull-right" name="dateOfBirth" id="dateOfBirth" value="@Model.DateOfBirth.Date.ToString("yyyy-MM-dd")">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="weight">Weight</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="weight" name="weight" placeholder="Enter Weight" value="@Model.Weight">
+                                    <span class="input-group-addon"><b>lb.</b></span>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label for="height">Height</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control" id="height" name="height" placeholder="Enter Height" value="@Model.Height">
+                                    <span class="input-group-addon"><b>cm.</b></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-md-1 col-sm-2 col-xs-6">
+                                <label for="_GenderMale">
+                                    <input type="radio" id="_GenderMale" name="_Gender" value="1" @(Model.Gender=="Male" ? "checked=\"checked\"":"") />
+                                    Male
+                                </label>
+                            </div>
+                            <div class="col-md-1 col-sm-2 col-xs-6">
+                                <label for="_GenderFemale">
+                                    <input type="radio" id="_GenderFemale" name="_Gender" value="2" @(Model.Gender=="Female" ? "checked=\"checked\"":"")/>
+                                    Female
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="userName">User Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-at"></i></span>
+                                    <input type="text" class="form-control" id="userName" name="userName" placeholder="Enter User Name" value="@Model.UserName">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4">
+                                <label for="email">Email Address</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-envelope"></i></span>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="Enter Email Address" value="@Model.Email">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="workPhone">Work Phone</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="workPhone" name="workPhone" placeholder="Enter Work Phone" data-inputmask='"mask": "(999) 999-9999"' data-mask="9999999999" value="@Model.WorkPhone">
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label for="phone">Phone</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-phone"></i>
+                                    </div>
+                                    <input type="text" class="form-control" id="phone" name="phone" placeholder="Enter Phone" data-inputmask='"mask": "(999) 999-9999"' data-mask="9999999999" value="@Model.Phone">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-3 col-md-4">
+                                <label for="addressLine1">Address Line 1</label>
+                                <input type="text" class="form-control" id="addressLine1" name="addressLine1" placeholder="Enter Address Line 1" value="@Model.AddressLine1">
+                            </div>
+                            <div class="col-lg-3 col-md-4">
+                                <label for="addressLine2">Address Line 2</label>
+                                <input type="text" class="form-control" id="addressLine2" name="addressLine2" placeholder="Enter Address Line 2" value="@Model.AddressLine2">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="city">City</label>
+                                <input type="text" class="form-control" id="city" name="city" placeholder="Enter City" value="@Model.City">
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label for="state">State</label>
+                                <input type="text" class="form-control" id="state" name="state" placeholder="Enter State" value="@Model.State">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="country">Country</label>
+                                <input type="text" class="form-control" id="country" name="country" placeholder="Enter Country" value="@Model.Country">
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label for="pincode">Zip Code</label>
+                                <input type="text" class="form-control" id="pincode" name="pincode" placeholder="Enter Zip Code" value="@Model.Pincode">
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <h4><span class="label label-danger">General Information</span></h4>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="form-group row">
+                            <div class="col-lg-4 col-md-6">
+                                <label for="bio">Biography</label>
+                                <textarea class="form-control" rows="7" id="bio" name="bio" placeholder="Enter Biography">@Model.Bio</textarea>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" rows="7" id="description" name="description" placeholder="Enter Description">@Model.Description</textarea>
+                            </div>
+
+                            <div class="col-lg-4 col-md-6">
+                                <label for="quote">Quote</label>
+                                <textarea class="form-control" rows="7" id="quote" name="quote" placeholder="Enter Quote">@Model.Quote</textarea>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <h4><span class="label label-danger">Social Information</span></h4>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="form-group row">
+                            <div class="col-lg-5 col-md-6">
+                                <label for="facebookURL" class="form-label">Facebook</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-facebook"></i></span>
+                                    <input id="facebookURL" name="facebookURL" type="text" class="form-control" placeholder="Enter Facebook URL" value="@Model.FacebookURL">
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-6">
+                                <label for="instagramURL" class="form-label">Instagram</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-instagram"></i></span>
+                                    <input id="instagramURL" name="instagramURL" type="text" class="form-control" placeholder="Enter Instagram URL" value="@Model.InstagramURL">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-5 col-md-6">
+                                <label for="twitterURL" class="form-label">Twitter</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-twitter"></i></span>
+                                    <input id="twitterURL" name="twitterURL" type="text" class="form-control" placeholder="Enter Twitter URL" value="@Model.TwitterURL">
+                                </div>
+                            </div>
+                            <div class="col-lg-5 col-md-6">
+                                <label for="spotifyURL" class="form-label">Spotify</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-spotify"></i></span>
+                                    <input id="spotifyURL" name="spotifyURL" type="text" class="form-control" placeholder="Enter Spotify URL" value="@Model.SpotifyURL">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-5 col-md-6">
+                                <label for="soundCloudURL" class="form-label">SoundCloud</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-soundcloud"></i></span>
+                                    <input id="soundCloudURL" name="soundCloudURL" type="text" class="form-control" placeholder="Enter SoundCloud URL" value="@Model.SoundCloudURL">
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+                <h4><span class="label label-danger">Misc. Information</span></h4>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="hourlyRate">Hourly Pay Rate</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon">$</span>
+                                    <input type="text" class="form-control" id="hourlyRate" name="hourlyRate" placeholder="Enter Hourly Rate" value="@Model.HourlyRate"/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="sortOrder">Sort Order</label>
+                                <input type="text" class="form-control" id="sortOrder" name="sortOrder" placeholder="Enter Sort Order" value="@Model.SortOrder">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <div class="checkbox icheck">
+                                    <label asp-for="DisplayInstructorFlag">
+                                        <input asp-for="DisplayInstructorFlag" /> Display on Instructors Page ?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-info"><i class="fa fa-save"></i> Save Details</button>
+            </div>
+        </form>
+    </div>
+</div>
+<div class="modal modal-warning fade" id="modal-warning">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Attention!</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to go back to Instructors Page ?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa fa-times-circle"></i><div>No</div></button>
+                <button id="BackToInstructors" type="button" data-dismiss="modal" class="btn btn-outline"><i class="fa fa-check-circle"></i><div>Yes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal modal-info fade" id="modal-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Update Instructor Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Do you want to verify the information, or continue saving the changes?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="VerifyBtn" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa  fa-angle-double-left"></i><div>Verify</div></button>
+                <button id="SaveInstructor" type="button" class="btn btn-outline"><i class="fa fa-check"></i><div>Save changes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="~/lib/admin-lte/plugins/input-mask/jquery.inputmask.js"></script>
+<script type="text/javascript" src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"], input[type="radio"]').iCheck({
+            checkboxClass: 'icheckbox_square-red',
+            radioClass: 'iradio_square-red',
+        });
+        //Date picker
+        $('#dateOfBirth').datepicker({
+            autoclose: true,
+            format:"yyyy-mm-dd"
+        });
+
+        $('[data-mask]').inputmask();
+        $("#BackToInstructors").click(function () {
+            $.ajax({
+                url: "@Url.Action("instructors", "admin")",
+                success: function (data) {
+                    $('body').removeClass('modal-open');
+                    $("body").css("padding-right", "0px");
+                    $(".modal-backdrop").remove();
+                    $("#instructors").html(data);
+                }
+            });
+        });
+
+        $("#SaveInstructor").click(function () {
+            $("#VerifyBtn").attr("disabled", "disabled");
+            $("#SaveInstructor").attr("disabled","disabled");
+            $("#SaveInstructor i").removeClass("fa-check");
+            $("#SaveInstructor i").addClass("fa-spinner fa-pulse fa-fw");
+            $("#SaveInstructor div").text("Saving Changes");
+            $.ajax({
+                url: "@Url.Action("updateinstructor", "admin")",
+                method: 'POST',
+                data: $('#EditInstructorForm').serialize(),
+                async: true,
+                success: function (data) {
+                    if (data == true) {
+                        $("#SaveInstructor i").removeClass("fa-spinner fa-pulse fa-fw");
+                        $("#SaveInstructor i").addClass("fa-check");
+                        $("#SaveInstructor div").text("Saved Changes");
+                        $("#SaveInstructor").removeAttr("disabled");
+                        $("#VerifyBtn").removeAttr("disabled");
+                        setTimeout(function () {
+                            $.ajax({
+                                url: "@Url.Action("instructors", "admin")",
+                                async: false,
+                                success: function (data) {
+                                    $('body').removeClass('modal-open');
+                                    $("body").css("padding-right", "0px");
+                                    $(".modal-backdrop").remove();
+                                    $("#instructors").html(data);
+                                }
+                            });
+                        }, 2000);
+
+                    }
+                }
+            });
+        });
+    });
+</script>

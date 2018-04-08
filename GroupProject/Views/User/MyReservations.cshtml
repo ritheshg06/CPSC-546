@@ -1,0 +1,111 @@
+﻿<div class="box box-danger">
+    <div class="box-header with-border">
+        <h3 class="box-title"><b>My Reservation Details</b></h3>
+    </div>
+    <div class="box-body" style="min-height:700px;">
+        <div class="container-fluid">
+            <div class="row">
+                <table id="reservationsTable" class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>Class Date</th>
+                            <th>Class Name</th>
+                            <th>Instructor</th>
+                            <th>Seat</th>
+                            <th>Reservation Date/Time</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                </table>
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script type="text/javascript">
+    $('#reservationsTable').DataTable().clear();
+    $('#reservationsTable').DataTable().destroy();
+    
+    function loadData() {
+        var ins_table = $('#reservationsTable').DataTable({
+            "lengthMenu": [[5, 10, 25, 50], [5, 10, 25, 50]],
+            destroy:true,
+            "pagination": true,
+            "autoWidth": false,
+            "responsive": true,
+            "processing": true,
+            "serverSide": true,
+            "deferLoading": 0,
+            "search": {
+                "search": ""
+            },
+            'ajax': { "url": '@Url.Action("getmyreservations", "user")', "type": "POST" },
+            'columns': [
+                {
+                    data: "class.startDate",
+                    render: function (data, type, row)
+                    {
+                        return data.split('T')[0];
+
+                    }
+                },
+                { 
+                    "data": "class.classType.className",
+                },
+                {
+                    data: "class",
+                    render: function (data, type, row)
+                    {
+                        if (data.instructorID != null)
+                            return data.substituteInstructor.firstName + " " + data.substituteInstructor.lastName;
+                        else
+                            return data.classType.instructor.firstName + " " + data.classType.instructor.lastName;
+                    }
+                },
+                {
+                    data: "",
+                    render: function (data, type, row) {
+                        if (row.roomLayoutID == 0)
+                            return "#";
+                        else
+                            return row.seatNumber;
+
+                    }
+                },
+                {
+                    data: "reservationDate",
+                    render: function (data, type, row)
+                    {
+                        var date = data.split('T')[0];
+                        var time = data.split('T')[1];
+                        return data.split("T")[0] + " " + formatAMPM(data+"Z");
+
+                    }
+                },
+                {
+                    data: "reservationStatus",
+                    render: function (data, type, row) {
+                        if (data == 1)
+                            return "Enrolled";
+                        if (data == 2)
+                            return "Cancelled";
+                    }
+
+                }
+            ]
+        });
+    }
+    loadData();
+    function formatAMPM(d) {
+        var date = new Date(d);
+        var hours = date.getUTCHours();
+        var minutes = date.getUTCMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+    }
+</script>

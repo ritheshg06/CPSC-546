@@ -1,0 +1,225 @@
+﻿@model ClassPackage;
+<div class="container-fluid">
+    <div class="row" style="margin-bottom:10px;">
+        <div class="col-lg-4 col-md-4" style="padding-left: 11px;">
+            <h3 style="margin:0px;margin-top:6px;">Add Class Package</h3>
+        </div>
+        <div class="col-lg-4 col-md-4">
+        </div>
+        <div class="col-lg-4 col-md-4">
+            <button data-toggle="modal" data-target="#modal-warning" data-backdrop="false" type="button" class="btn btn-block btn-primary " style="float:right;max-width:180px;"><i class="fa fa-angle-double-left"></i> Back to Class Packages</button>
+        </div>
+    </div>
+    <div class="row">
+        <form id="EditClassPackageForm" role="form">
+            <input type="hidden" id="classPackageID" name="classPackageID" value="@Model.ClassPackageID" />
+            <div class="box-body">
+                <h4><span class="label label-danger">Class Package Information</span></h4>
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <div class="form-group row">
+                            <div class="col-lg-3 col-md-4">
+                                <label for="classPackageName">Class Package Name</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-ticket"></i></span>
+                                    <input type="text" class="form-control" id="classPackageName" name="classPackageName" placeholder="Enter Class Package Name" value="@Model.ClassPackageName">
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <label for="expirationDate">Expiration Date</label>
+                                <label for="expirationDate">Expiration Duration</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-ticket"></i></span>
+                                    <input type="text" class="form-control" id="expirationDuration" name="expirationDuration" placeholder="Enter expiration duration in days" value="@Model.ExpirationDuration">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-6 col-md-8">
+                                <label for="description">Description</label>
+                                <textarea class="form-control" rows="7" id="classPackageDescription" name="classPackageDescription" placeholder="Enter Description">@Model.ClassPackageDescription</textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-3 col-md-4">
+                                <label for="price">Price</label>
+                                <div class="input-group">
+                                    <span class="input-group-addon"><i class="fa fa-dollar"></i></span>
+                                    <input type="text" class="form-control" id="price" name="price" placeholder="Enter Price" value="@Model.Price">
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4">
+                                <label for="badge">Badge</label>
+                                <input type="text" class="form-control" id="badge" name="badge" placeholder="Enter Badge" value="@Model.Badge">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-3">
+                                <label for="classCount">Class Count</label>
+                                <input type="text" class="form-control" id="classCount" name="classCount" required placeholder="Enter Class Count" value="@Model.ClassCount">
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label for="sortOrder">Sort Order</label>
+                                <input type="text" class="form-control" id="sortOrder" name="sortOrder" placeholder="Enter Sort Order" value="@Model.SortOrder">
+                            </div>
+                            <div class="col-lg-2 col-md-3">
+                                <label for="classTypesDropDown">Available to ClassTypes:</label>
+                                <select class="form-control" id="classTypesDropDown" name="classTypesDropDown[]" multiple="multiple">
+                                    @foreach (ClassType classType in ViewBag.ClassTypes)
+                                    {
+                                        <option value="@classType.ClassTypeID">@classType.ClassName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-lg-2 col-md-4">
+                                <div class="checkbox icheck">
+                                    <label for="IsActiveFlag">
+                                        <input type="checkbox" @((Model.IsActiveFlag==true)? "checked":"") id="IsActiveFlag" />Is Active ?
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-lg-2 col-md-4">
+                                <div class="checkbox icheck">
+                                    <label for="IsFeaturedFlag">
+                                        <input type="checkbox" @((Model.IsFeaturedFlag==true)? "checked":"") id="IsFeaturedFlag" />Is Featured ?
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+            <!-- /.box-body -->
+
+            <div class="box-footer">
+                <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-info"><i class="fa fa-save"></i> Save Details</button>
+            </div>
+            <input name="isActiveFlag" type="hidden" value="false" />
+            <input name="isFeaturedFlag" type="hidden" value="false" />
+        </form>
+    </div>
+</div>
+<div class="modal modal-warning fade" id="modal-warning">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Attention!</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Are you sure you want to go back to Class Packages Page ?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa fa-times-circle"></i><div>No</div></button>
+                <button id="BackToClassPackages" type="button" data-dismiss="modal" class="btn btn-outline"><i class="fa fa-check-circle"></i><div>Yes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<div class="modal modal-info fade" id="modal-info">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Update Class Package Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Do you want to verify the information, or continue saving the changes?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="VerifyBtn" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa  fa-angle-double-left"></i><div>Verify</div></button>
+                <button id="SaveClassPackage" type="button" class="btn btn-outline"><i class="fa fa-check"></i><div>Save changes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+<script type="text/javascript" src="~/lib/admin-lte/plugins/input-mask/jquery.inputmask.js"></script>
+<script type="text/javascript" src="~/lib/bootstrap-datepicker/dist/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" src="~/lib/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        var classTypeIDs = JSON.parse(@Json.Serialize(Model.ClassTypes));
+        
+        $("#classTypesDropDown").select2();
+
+        $('#classTypesDropDown').select2().val(classTypeIDs).trigger("change")
+        //Date picker
+        $('#expirationDate').datepicker({
+            autoclose: true,
+            format: "yyyy-mm-dd"
+        });
+        //iCheck for checkbox and radio inputs
+        $('input[type="checkbox"], input[type="radio"]').iCheck({
+            checkboxClass: 'icheckbox_square-red',
+            radioClass: 'iradio_square-red',
+        });
+        $("#BackToClassPackages").click(function () {
+            $.ajax({
+                url: "@Url.Action("classpackages", "admin")",
+                success: function (data) {
+                    $('body').removeClass('modal-open');
+                    $("body").css("padding-right", "0px");
+                    $(".modal-backdrop").remove();
+                    $("#classPackages").html(data);
+                }
+            });
+        });
+
+        $("#SaveClassPackage").click(function () {
+            $("#VerifyBtn").attr("disabled", "disabled");
+            $("#SaveClassPackage").attr("disabled","disabled");
+            $("#SaveClassPackage i").removeClass("fa-check");
+            $("#SaveClassPackage i").addClass("fa-spinner fa-pulse fa-fw");
+            $("#SaveClassPackage div").text("Saving Changes");
+            var classPackageID = $("#classPackageID").val();
+            var classPackageName = $("#classPackageName").val();
+            var expirationDuration = $("#expirationDuration").val();
+            var classPackageDescription = $("#classPackageDescription").val();
+            var price = $("#price").val();
+            var badge = $("#badge").val();
+            var classCount = $("#classCount").val();
+            var sortOrder = $("#sortOrder").val();
+            var isActiveFlag = $("#isActiveFlag").val();
+            var isFeaturedFlag = $("#isFeaturedFlag").val();
+            var classTypes=JSON.stringify($("#classTypesDropDown").select2("val"));
+            $.ajax({
+                url: "@Url.Action("updateClassPackage", "admin")",
+                method: 'POST',
+                data: {classPackageID:classPackageID,classPackageName:classPackageName,expirationDuration:expirationDuration,classPackageDescription:classPackageDescription,price:price,badge:badge,classCount:classCount,sortOrder:sortOrder,isActiveFlag:isActiveFlag,isFeaturedFlag:isFeaturedFlag,classTypes:classTypes},
+                async: true,
+                success: function (data) {
+                    if (data == true) {
+                        $("#SaveClassPackage i").removeClass("fa-spinner fa-pulse fa-fw");
+                        $("#SaveClassPackage i").addClass("fa-check");
+                        $("#SaveClassPackage div").text("Saved Changes");
+                        $("#SaveClassPackage").removeAttr("disabled");
+                        $("#VerifyBtn").removeAttr("disabled");
+                        setTimeout(function () {
+                            $.ajax({
+                                url: "@Url.Action("classpackages", "admin")",
+                                success: function (data) {
+                                    $('body').removeClass('modal-open');
+                                    $("body").css("padding-right","0px");
+                                    $(".modal-backdrop").remove();
+                                    $("#classPackages").html(data);
+                                }
+                            });
+                        }, 2000);
+
+                    }
+                }
+            });
+        });
+    });
+</script>

@@ -1,0 +1,289 @@
+﻿@{ 
+    Location location = ViewBag.LocationDetails;
+    DateTime Today = ViewBag.Today;
+    Dictionary<string,string> DateRange=ViewBag.DateRange;
+
+    <script type="text/javascript">
+        var classes = @Json.Serialize(ViewBag.Classes);
+        var todayDate =@Json.Serialize(Today.Date.ToString("yyyy-MM-dd"));
+        var dateRange =@Json.Serialize(DateRange);
+        var week =@ViewBag.Week;
+        var userReservations=@Json.Serialize(ViewBag.UserReservations);
+    </script>
+}
+@using GroupProject.Constants;
+<div class="box box-danger">
+    <div class="box-header with-border">
+        <h3 class="box-title"><b>Class Schedule Calendar</b></h3>
+    </div>
+    <div class="box-body" style="min-height:700px;">
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                <div class="text-center" id="studioInfo">
+                    <h4>@location.LocationName</h4>
+                    <h5>@location.AddressLine1, @location.AddressLine2, @location.State @location.Pincode</h5>
+                    <h5>Phone: 714 818 2464 | <a href="https://www.google.com/maps/dir/Current+Location/@location.AddressLine1,+@location.AddressLine2,+@location.State+@location.Pincode/" target="_blank">Get Directions</a></h5>
+                    @*<h3>@Today.ToString()</h3>*@
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin:1px;padding:10px;">
+            <div class="col-lg-offset-3 col-lg-2 col-md-4">
+                <label for="classTypeID">Select Instructor</label>
+                <select class="form-control" id="InstructorsFilter" name="InstructorsFilter">
+                    <option value="0" selected>All</option>
+                    @foreach (Instructor i in ViewBag.Instructors)
+                    {
+                        <option value="@i.FirstName @i.LastName">@i.FirstName @i.LastName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <label for="classTypeID">Select Class Type</label>
+                <select class="form-control" id="ClassTypeFilter" name="ClassTypeFilter">
+                    <option value="0" selected>All</option>
+                    @foreach (ClassType t in ViewBag.ClassTypes)
+                    {
+                        <option value="@t.ClassName">@t.ClassName</option>
+                    }
+                </select>
+            </div>
+            <div class="col-lg-2 col-md-4">
+                <label for="locationID">Select Location</label>
+                <select class="form-control" id="LocationsFilter" name="LocationsFilter">
+                    @foreach (Location loc in ViewBag.Locations)
+                    {
+                        if (location.LocationID == loc.LocationID)
+                        {
+                            <option value="@loc.LocationID" selected>@loc.LocationName</option>
+
+                        }
+                        else
+                        {
+                            <option value="@loc.LocationID">@loc.LocationName</option>
+
+                        }
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="row" id="navigation" style="padding-bottom:10px;">
+            
+        </div>
+        <div id="desktopView">
+            
+        </div>
+        <div id="Legend" style="text-align:center">
+            <div style="display:inline-block;width:95px;">
+                <div style="margin-right: 5px;border-radius: 50px;background: gray;display:inline-block !important;padding-top: 1px;width: 20px;height: 20px;font-size: 12px;text-align: center;color: white !important;">
+                    E
+                </div>
+                Enrolled
+            </div>
+            <div style="display:inline-block;width:95px;">
+                <div style="margin-right: 5px;border-radius: 50px;background: gray;display:inline-block !important;padding-top: 1px;width: 20px;height: 20px;font-size: 12px;text-align: center;color: white !important;">
+                    W
+                </div>
+                Waitlist
+            </div>
+            <div style="display:inline-block;width:95px;">
+                <div style="margin-right: 5px;border-radius: 50px;background: gray;display:inline-block !important;padding-top: 1px;width: 20px;height: 20px;font-size: 12px;text-align: center;color: white !important;">
+                    S
+                </div>
+                Substitute
+            </div>
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+<!-- /.box -->
+<script type="text/javascript" src="~/lib/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript">
+
+    if (week == 0) {
+        $("#navigation").append('<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2" id="prev"><a class="btn btn-primary diabled" disabled="disabled"><i class="fa fa-step-backward" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Prev</a></div><div class="col-lg-10 col-md-10 col-sm-10 col-xs-8"></div>');
+        $("#navigation").append('<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2" id="next"><a class="btn btn-primary" style="float:right;">Next&nbsp;&nbsp;&nbsp;<i class="fa fa-step-forward" aria-hidden="true"></i></a></div>');
+        $("#next").click(function () {
+            $.ajax({
+                url: "@Html.Raw(Url.Action("bookingsCalendar", "user",new { locationID = location.LocationID,startDate= DateTime.Parse(DateRange["Sunday"]).AddDays(7 * (ViewBag.Week + 1)).ToShortDateString(),endDate= DateTime.Parse(DateRange["Saturday"]).AddDays(7 * (ViewBag.Week + 1)).ToShortDateString(),Week=ViewBag.Week+1 }))",
+                success: function (data) {
+                    $("#MainContainer").html(data);
+                }
+            });
+        });
+    }
+    if (week > 0)
+    {
+        $("#navigation").append('<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2" id="prev"><a class="btn btn-primary" ><i class="fa fa-step-backward" aria-hidden="true"></i>&nbsp;&nbsp;&nbsp;Prev</a></div><div class="col-lg-10 col-md-10 col-sm-10 col-xs-8"></div>');
+        $("#prev").click(function () {
+            $.ajax({
+                url: "@Html.Raw(Url.Action("bookingsCalendar", "user",new { locationID = location.LocationID,startDate= DateTime.Parse(DateRange["Sunday"]).AddDays(-7).ToShortDateString(),endDate= DateTime.Parse(DateRange["Saturday"]).AddDays(-7).ToShortDateString(), Week=ViewBag.Week-1 }))",
+                success: function (data) {
+                    $("#MainContainer").html(data);
+                }
+            });
+        });
+        $("#navigation").append('<div class="col-lg-1 col-md-1 col-sm-1 col-xs-2" id="next"><a class="btn btn-primary" style="float:right;">Next&nbsp;&nbsp;&nbsp;<i class="fa fa-step-forward" aria-hidden="true"></i></a></div>');
+        $("#next").click(function () {
+            $.ajax({
+                url: "@Html.Raw(Url.Action("bookingsCalendar", "user",new { locationID = location.LocationID,startDate= DateTime.Parse(DateRange["Sunday"]).AddDays(7).ToShortDateString(),endDate= DateTime.Parse(DateRange["Saturday"]).AddDays(7).ToShortDateString(),Week=ViewBag.Week+1 }))",
+                success: function (data) {
+                    $("#MainContainer").html(data);
+                }
+            });
+        });
+    }
+    $("#InstructorsFilter").select2();
+    $("#ClassTypeFilter").select2();
+    $("#LocationsFilter").select2();
+    $("#desktopView").append("<table id=\"DesktopCalView\" class=\"table weekCalendarDesktop\"><thead><tr>");
+    var todayArray = todayDate.split('-');
+    var year = todayArray[0];
+    var month = todayArray[1];
+    var day = todayArray[2];
+    var today = new Date(year + "-" + month + "-" + day);
+    $("#DesktopCalView").append("<tbody><tr></tr></tbody>");
+    $.each(dateRange, function (k, v) {
+        
+        var date = new Date(v);
+        if ((today.getUTCMonth() == date.getUTCMonth()) && (today.getUTCDate() == date.getUTCDate())) {
+            $("#DesktopCalView > thead > tr").append("<th class=\"today\">" + k.substring(0, 3) + "<br/>" + (date.getUTCMonth() + 1) + "." + date.getUTCDate() + "</th>");
+        } else {
+            $("#DesktopCalView > thead > tr").append("<th>" + k.substring(0, 3) + "<br/>" + (date.getUTCMonth() + 1) + "." + date.getUTCDate() + "</th>");
+        }
+        var filtered = $.grep(classes, function (element, index) {
+            var d = new Date(element.startDate.split('T')[0]);
+            var result = (d.getTime() === date.getTime());
+            return result;
+        });
+        $("#DesktopCalView > tbody > tr:first-child").append("<td></td>");
+        $.each(filtered, function (i, e) {
+            var enrollment = $.grep(userReservations, function (element, index) {
+                return element.classID == e.classID;
+            });
+            
+
+            var startstr = e.startDate.split("T");
+            var endstr = e.endDate.split("T");
+            var startdate = new Date(startstr[0]);
+            var enddate = new Date(endstr[0]);
+
+            var timediff = Math.abs(new Date("1970-01-01T" + e.startTime).getTime() - new Date("1970-01-01T" + e.endTime).getTime());
+            var mins = Math.round(timediff / 60000) + " mins.";
+
+            var staff = e.classType.instructor.firstName + " " + e.classType.instructor.lastName;
+            
+            if (e.instructorID != null) {
+                staff = e.substituteInstructor.firstName + " " + e.substituteInstructor.lastName ;
+            }
+
+            if (e.disabledForView===true) {
+                if (e.isCancelled===true) {
+                    $("#DesktopCalView > tbody > tr > td:nth-child(" + (date.getUTCDay() + 1) + ")").append('<div class="disabled class" data-i="' + staff + '" data-c="' + e.classType.className + '" data-l="' + e.classType.locationID + '"><b>' + e.classType.className + '</b><br/>Class Cancelled<br/>' + formatAMPM(e.startDate.split('T')[0]+"T"+e.startTime + "Z") + '<br/>' + mins + '</div>');
+                }
+                else {
+                    $("#DesktopCalView > tbody > tr > td:nth-child(" + (date.getUTCDay() + 1) + ")").append('<div class="disabled class" data-i="' + staff + '" data-c="' + e.classType.className + '" data-l="' + e.classType.locationID + '"><b>' + e.classType.className + '</b><br/>' + staff.split(' ')[0] + '<br/>' + formatAMPM(e.startDate.split('T')[0] + "T" + e.startTime + "Z") + '<br/>' + mins + '</div>');
+                }
+            }
+            else {
+                if (e.isCancelled===true) {
+                    $("#DesktopCalView > tbody > tr > td:nth-child(" + (date.getUTCDay() + 1) + ")").append('<div class="disabled class" data-i="' + staff + '" data-c="' + e.classType.className + '" data-l="' + e.classType.locationID + '"><b>' + e.classType.className + '</b><br/>Class Cancelled<br/>' + formatAMPM(e.startDate.split('T')[0] + "T" +e.startTime + "Z") + '<br/>' + mins + '</div>');
+                }
+                else {
+                    var substitute = "";
+                    var waitlist = "";
+                    var enrolled = "";
+                    if (e.instructorID != null) {
+                        substitute = '<div class="substitute disabled">S</div>';
+                    }
+                    if (false) {
+                        waitlist = '<div class="waitlist disabled">W</div>';
+                    }
+                    if (enrollment.length > 0) {
+                        enrolled = '<div class="enrolled disabled">E</div>';
+                        $("#DesktopCalView > tbody > tr > td:nth-child(" + (date.getUTCDay() + 1) + ")").append('<div class="disabled class" data-i="' + staff + '" data-c="' + e.classType.className + '" data-l="' + e.classType.locationID + '"><b>' + e.classType.className + '</b><br/>' + staff.split(' ')[0] + substitute+ '<br/>' + formatAMPM(e.startDate.split('T')[0] + "T" + e.startTime + "Z") + enrolled + '<br/>' + mins + waitlist + '</div>');
+                    }
+                    else {
+                        var class_url = window.location.origin + "/bookings/SpotReservation/" + e.ClassID;
+                        $("#DesktopCalView > tbody > tr > td:nth-child(" + (date.getUTCDay() + 1) + ")").append('<div class="class" data-classID="' + e.classID + '"  data-i="' + staff + '" data-c="' + e.classType.className + '" data-l="' + e.classType.locationID + '"><div class="description" data-plugin="webuiPopover" data-placement="auto" data-trigger="hover" data-title="<a href=\'' + class_url + '\'>' + e.classType.className + '</a>"><div style="display:none">' + e.classType.classDescription + '</div>' + e.classType.className + '</div>' + staff.split(' ')[0] + substitute + '<br/>' + formatAMPM(e.startDate.split('T')[0] + "T" + e.startTime + "Z") + '<br/>' + mins + waitlist + '</div>');
+                    }
+
+                }
+            }
+        });
+    })
+    function formatAMPM(d) {
+        var date = new Date(d);
+        var hours = date.getUTCHours();
+        var minutes = date.getUTCMinutes();
+        var ampm = hours >= 12 ? 'pm' : 'am';
+        hours = hours % 12;
+        hours = hours ? hours : 12; // the hour '0' should be '12'
+        minutes = minutes < 10 ? '0' + minutes : minutes;
+        var strTime = hours + ':' + minutes + ' ' + ampm;
+        return strTime;
+    }
+
+    var i = $("#InstructorsFilter").val();
+    var c = $("#ClassTypeFilter").val();
+    var l = $("#LocationsFilter").val();
+    ApplySearchFilter();
+    clearout();
+    $("#InstructorsFilter").on("change", function () {
+        i = $(this).val();
+        if (ApplySearchFilter()) {
+            clearout();
+        }
+    });
+    $("#ClassTypeFilter").on("change", function () {
+        c = $(this).val();
+        if (ApplySearchFilter()) {
+            clearout();
+        }
+    });
+    $("#LocationsFilter").on("change", function () {
+        l = $(this).val();
+        var query = "?locationID=" + l;
+        var Array = window.location.href.split('?');
+        var newURL = Array[0] + query;
+        window.location.href = newURL;
+    });
+    function ApplySearchFilter() {
+
+        $("body").find(".class").removeAttr('style');
+        if (i == "0" && c == "0") {
+            $(".class").show();
+        }
+        else if (i == "0" && c != "0") {
+            $(".class").hide();
+            $('.class[data-c="' + c + '"]').show();
+        }
+        else if (i != "0" && c == "0") {
+            $(".class").hide();
+            $('.class[data-i="' + i + '"]').show();
+        }
+        else if (i != "0" && c != "0") {
+            $(".class").hide();
+            $('.class[data-i="' + i + '"][data-c="' + c + '"]').show();
+        }
+        return true;
+    }
+    function clearout() {
+        var Elems = $("#DesktopCalView td").find(".class:visible:last");
+        $(Elems).each(function (i, e) {
+            $(e).css("cssText", "display:block;border-bottom:0px !important;");
+        });
+    }
+
+    $("#DesktopCalView > tbody > tr >td").find("div").not(".disabled").click(function () {
+        var id = $(this).data("classid");
+        $.ajax({
+            url: "@Html.Raw(Url.Action("enrollinclass", "user",new { locationID = location.LocationID,startDate= DateTime.Parse(DateRange["Sunday"]).ToShortDateString(),endDate= DateTime.Parse(DateRange["Saturday"]).ToShortDateString(), week=ViewBag.Week }))&classID=" + id,
+            //url: "/user/enrollinclass?classID=" + id,
+            success: function (data) {
+                $("#MainContainer").html(data);
+            }
+        });
+    });
+</script>

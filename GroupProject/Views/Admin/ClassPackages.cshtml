@@ -1,0 +1,102 @@
+﻿<div class="container-fluid">
+    <div class="row" style="margin-bottom:10px;">
+        <div style="padding:0px;width:auto;float:left;">
+            <button id="AddClassPackageBtn" type="button" class="btn btn-block btn-primary "><i class="fa fa-plus"></i> Add New Class Pack</button>
+        </div>
+    </div>
+    <div class="row">
+        <table id="classPackagesTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Class Pack Name</th>
+                    <th>Description</th>
+                    <th>Class Count</th>
+                    <th>Badge</th>
+                    <th>Price</th>
+                    <th>Expiration Duration</th>
+                    <th>Sort Order</th>
+                    <th>Is Active ?</th>
+                    <th>Is Featured ?</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#classPackagesTable').DataTable().clear();
+        $('#classPackagesTable').DataTable().destroy();
+        $("#classPackagesTable tbody")
+            .off("click", "tr td button.editClassPackage");
+
+        function loadData() {
+            var ins_table = $('#classPackagesTable').DataTable({
+                "lengthMenu": [[5, 10, 25, 50], [5, 10, 25, 50]],
+                destroy:true,
+                "pagination": true,
+                "autoWidth": false,
+                "responsive": true,
+                "processing": true,
+                "serverSide": true,
+                "deferLoading": 0,
+                "search": {
+                    "search": ""
+                },
+                'ajax': { "url": '@Url.Action("getclasspackages", "admin")', "type": "POST" },
+                'columns': [
+                    { "data": "classPackageName" },
+                    { "data": "classPackageDescription" },
+                    {"data": "classCount"},
+                    { "data": "badge" },
+                    { "data": "price" },
+                    { "data": "expirationDuration" },
+                    { "data": "sortOrder" },
+                    {
+                        data: "isActive",
+                        render: function (data, type, row) {
+                            if (row.isActiveFlag == true)
+                                return "Yes"
+                            else
+                                return "No"
+                        }
+                    },
+                    {
+                        data: "isFeatured",
+                        render: function (data, type, row) {
+                            if (row.isFeaturedFlag == true)
+                                return "Yes"
+                            else
+                                return "No"
+                        }
+                    },
+                    {
+                        data: "classPackageID",
+                        render: function (data, type, row) {
+                            return "<button class=\"editClassPackage btn btn-info btn-flat\" data-i='"+data+"'><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></button>";
+                        }
+                    }
+                ]
+            });
+        }
+        loadData();
+
+
+        $("#AddClassPackageBtn").click(function () {
+            $("#classPackages").load("@Url.Action("addClassPackage", "admin")");
+        });
+
+        $('#classPackagesTable tbody').on('click', 'tr td button.editClassPackage', function () {
+            var c_id = $(this).data("i");
+            $.ajax({
+                url: '@Url.Action("updateClassPackage", "admin")',
+                method: 'GET',
+                data: { classPackageID: c_id },
+                success: function (data) {
+                    $("#classPackages").html(data);
+                }
+
+            })
+        });
+    });
+</script>

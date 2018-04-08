@@ -1,0 +1,223 @@
+﻿@{
+    Class classDetails = ViewBag.Class;
+    List<Reservation> ReservationData = ViewBag.ReservationData;
+
+    if (classDetails.ClassSchedule.RoomLayoutID != 0)
+    {
+        <script type="text/javascript">
+            var hasRoomLayout = true;
+            var roomLayout = JSON.parse(@Json.Serialize(classDetails.ClassSchedule.RoomLayout.SeatMatrix));
+            var reservedData = @Json.Serialize(ReservationData);
+            var Rows =@classDetails.ClassSchedule.RoomLayout.Rows;
+            var Columns =@classDetails.ClassSchedule.RoomLayout.Columns;
+            var userReservation=@Json.Serialize(ViewBag.UserReservation);
+        </script>
+
+    }
+    else
+    {
+        <script type="text/javascript">
+            var hasRoomLayout = false;
+        </script>
+
+    }
+}
+<div class="box box-danger">
+    <div class="box-header with-border">
+        <h3 class="box-title"><b>Enroll in the Class</b></h3>
+        <h3 class="box-title" style="float:right;"><b><a style="cursor:pointer;" id="backToCalendar">Back to Calendar</b></a></h3>
+    </div>
+    <div class="box-body" style="min-height:700px;">
+        <div class="text-center">
+            <h3>@classDetails.ClassType.ClassName</h3>
+            <h5>@classDetails.ClassType.ClassDescription</h5>
+            @if (classDetails.InstructorID != null || classDetails.InstructorID.HasValue)
+            {
+                <h5>Instructor : @classDetails.ClassType.Instructor.FirstName @classDetails.ClassType.Instructor.LastName</h5>
+                <h5><b>Substitute : @classDetails.SubstituteInstructor.FirstName @classDetails.SubstituteInstructor.LastName</b></h5>
+            }
+            else
+            {
+                <h5><b>Instructor : @classDetails.ClassType.Instructor.FirstName @classDetails.ClassType.Instructor.LastName</b></h5>
+            }
+            <h5>Date : @classDetails.StartDate.ToShortDateString()</h5>
+            <h5>Time : @classDetails.StartDate.Add(classDetails.StartTime).ToString("hh:mm tt") | Duration : @classDetails.EndTime.Subtract(classDetails.StartTime).TotalMinutes mins.</h5>
+        </div>
+        <br/>
+        <div class="text-center">
+            @{
+                if (classDetails.ClassType.MaxCapacity <= ReservationData.Count)
+                {
+                    <h4>The class is full.</h4>
+                    <a id="EnrollInWaitlistButton" type="button" class="btn btn-primary btn-cons"><i class="fa fa-bullseye" aria-hidden="true"></i><div>Enroll in the Waitlist</div></a>
+                }
+                else
+                {
+                    <a id="ReserveSpotButton" type="button" class="btn btn-primary btn-cons" style="display:none;"><i class="fa fa-bullseye" aria-hidden="true"></i><div>Sign up for this class</div></a>
+                }
+            }
+        </div>
+        <h3 id="reStatus" style="color: darkred;font-weight: lighter;text-align: center;">
+            @ViewBag.Message
+        </h3> 
+        <br/>
+        <hr/>
+        <div class="row">
+            <div id="Seats" draggable="false" class="table-responsive col-md-12">
+                <table id="BookingSeatsMatrix" class="table" draggable="false" style="margin:0 auto;margin-bottom:35px;">
+                    <tbody draggable="false"></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    $("#backToCalendar").click(function () {
+        $.ajax({
+                url: "@Html.Raw(Url.Action("bookingsCalendar", "user",new { locationID = ViewBag.LocationID,startDate= ViewBag.StartDate,endDate= ViewBag.EndDate,week=ViewBag.Week}))",
+                success: function (data) {
+                    $("#MainContainer").html(data);
+                }
+        });
+    });
+    if (hasRoomLayout)
+    {
+        for (i = 0; i < Rows; i++) {
+            $("#BookingSeatsMatrix tbody").append("<tr></tr>");
+            for (j = 0; j<Columns; j++) {
+                $("#BookingSeatsMatrix tbody tr:last").append("<td data-row=\"" + i + "\" data-column=\"" + j + "\"></td>");
+            }
+        }
+        $("#BookingSeatsMatrix").on("rendered", function () {
+            $("#BookingSeatsMatrix > tbody > tr > td > a").click(function () {
+
+                $("#BookingSeatsMatrix").css("pointer-events", "none");
+                $("#BookingSeatsMatrix").css("opacity", "0.3");
+                $('#BookingSeatsMatrix').attr('disabled', 'disabled');
+                var spot = $(this).data("spot");
+
+                $("body").attr("style", "cursor:progress !important");
+                $("#reStatus").attr("style", "color: darkred;font-weight: lighter;text-align: center;display:none;");
+                $("#reStatus").text("");
+                var tag = $(this);
+                var msg = "";
+                $.when(
+                    $.ajax({
+                        url: "@Url.Action("enrollinclass", "user")",
+                        type: "POST",
+                        data: { locationID:@ViewBag.LocationID,classID:@classDetails.ClassID,roomLayoutID:@classDetails.ClassSchedule.RoomLayoutID,seatNumber: spot, reservationStatus:1 },
+                        success: function (data) {
+
+                            $("#reStatus").attr("style", "color: darkred;font-weight: lighter;text-align: center;");
+                            $("#reStatus").text(data.message);
+                            
+                            msg = data.message;
+                            $.ajax({
+                                url: "@Html.Raw(Url.Action("enrollinclass", "user", new { locationID = ViewBag.LocationID, startDate = ViewBag.StartDate, endDate = ViewBag.EndDate, week = ViewBag.Week}))&classID=" + @classDetails.ClassID+"&message="+msg,
+
+                                success: function (data) {
+                                    $("#MainContainer").html(data);
+                                }
+                            });
+                            
+                            ResetTableState();
+
+                        },
+                        error: function (xhr) {
+                            $("#reStatus").attr("style", "color: darkred;font-weight: lighter;text-align: center;");
+                            $("#reStatus").text("Error Enrolling to the Class......Please retry after some time ");
+                        }
+                    })
+                ).done(function () {
+                    $("body").attr("style", "cursor:default !important");
+                });
+            });
+        });
+        var counter = 0;
+        $.each(roomLayout, function (index, element) {
+            if (element != "-") {
+                var cell = $("#BookingSeatsMatrix tbody tr").find("td[data-column='" + element.C + "'][data-row='" + element.R + "']");
+                if (element.S == "fan") {
+                    $(cell).html("<fan><i class=\"icon md-toys\" aria-hidden=\"true\" style=\"font-size:36px;\"></i></fan>");
+                }
+                else if (element.S == "tv") {
+                    $(cell).html("<tv><i class=\"icon md-tv\" aria-hidden=\"true\" style=\"font-size:36px;\"></i></tv>");
+                }
+                else if (element.S == "speaker") {
+                    $(cell).html("<speaker><i class=\"icon md-speaker\" aria-hidden=\"true\" style=\"font-size:36px;\"></i></speaker>");
+                }
+                else if (element.S == "instructor") {
+                    $(cell).html("<instructor><i class=\"fa fa-user \" style=\"font-size:36px;\" aria-hidden=\"true\"></i></instructor>");
+                }
+                else if (element.S == "C") {
+                    var Name = $(element).SN;
+                    var status = $(element).S;
+
+                    var rData = $(reservedData).filter(function (reserveindex) {
+                        return element.SN == reservedData[reserveindex].seatNumber;
+                    });
+                    
+                    if (rData.length > 0) {
+                        if (userReservation != null) {
+                            if (rData[0].userID == userReservation.userID)
+                                $(cell).html("<div id=\"" + element.C + "_" + element.R + "\" class=\"disabled\" style=\"background-color:darkred;color:white;\">" + element.SN + "</div>");
+                            else {
+                                $(cell).html("<div id=\"" + element.C + "_" + element.R + "\" class=\"disabled\">" + element.SN + "</div>");
+                            }   
+                        }
+                        else {
+                            $(cell).html("<div id=\"" + element.C + "_" + element.R + "\" class=\"disabled\">" + element.SN + "</div>");
+                        }   
+                    }
+                    else {
+                        $(cell).html("<a id=\"" + element.C + "_" + element.R + "\" data-spot=\"" + element.SN + "\" >" + element.SN + "</a>");
+                    }
+                }
+            }
+            counter++;
+            if (counter >= roomLayout.length) {
+                $("#BookingSeatsMatrix").trigger("rendered");
+            }
+        });
+    }
+    else {
+        $("#ReserveSpotButton").show();
+        $("#ReserveSpotButton").click(function () {
+            $("body").attr("style", "cursor:progress !important");
+            $("#ReserveSpotButton").attr('disabled', true);
+            $("#ReserveSpotButton").addClass("disabled");
+            $("#ReserveSpotButton i").addClass("fa-spin");
+            $.when(
+                $.ajax({
+                    url: "@Url.Action("enrollinclass", "user")",
+                    type: "POST",
+                    data: { locationID:@ViewBag.LocationID,classID:@classDetails.ClassID,roomLayoutID:@classDetails.ClassSchedule.RoomLayoutID,seatNumber:0,reservationStatus:1},
+                    success: function (data) {
+                        $("#reStatus").attr("style", "color: darkred;font-weight: lighter;text-align: center;");
+                        $("#reStatus").text(data.message);
+                    },
+                    error: function (xhr) {
+                        $("#reStatus").attr("style", "color: darkred;font-weight: lighter;text-align: center;");
+                        $("#reStatus").text("Error Enrolling to the Class......Please retry after some time ");
+
+                        $("body").attr("style", "cursor:default !important");
+                        $("#ReserveSpotButton").removeAttr('disabled', true);
+                        $("#ReserveSpotButton").removeClass("disabled");
+                        $("#ReserveSpotButton i").removeClass("fa-spin");
+                    }
+                })
+            ).done(function () {
+                $("body").attr("style", "cursor:default !important");
+                $("#ReserveSpotButton").removeAttr('disabled', true);
+                $("#ReserveSpotButton").removeClass("disabled");
+                $("#ReserveSpotButton i").removeClass("fa-spin");
+            });
+        });
+    }
+    function ResetTableState() {
+
+        $("#BookingSeatsMatrix").css("pointer-events", "all");
+        $("#BookingSeatsMatrix").css("opacity", "1");
+        $('#BookingSeatsMatrix').removeAttr('disabled');
+    }
+</script>

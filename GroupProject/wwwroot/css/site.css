@@ -1,0 +1,294 @@
+﻿.btn-app {
+    margin: 0 auto !important;
+}
+
+.modal {
+    text-align: center;
+    padding: 0 !important;
+}
+
+    .modal:before {
+        content: '';
+        display: inline-block;
+        height: 100%;
+        vertical-align: middle;
+        margin-right: -4px;
+    }
+
+.modal-dialog {
+    display: inline-block;
+    text-align: left;
+    vertical-align: middle;
+}
+
+.list-group-item {
+    background-color: whitesmoke;
+}
+
+.btn-app:active,
+.btn-app.active {
+    border: 2px solid darkblue;
+}
+
+.btn-app:active,
+.btn-app:hover {
+    border-color: dodgerblue;
+}
+
+/**********RoomLayout Page css*/
+#SeatsTable {
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+    #SeatsTable tbody td.highlighted {
+        border: 2px dotted whitesmoke !important;
+        background-color: darkred !important;
+        color: white !important;
+    }
+
+        #SeatsTable tbody td.highlighted > cycle {
+            background-color: #d6d6d6 !important;
+        }
+
+        #SeatsTable tbody td.highlighted .material-icons {
+            color: white !important;
+        }
+
+    #SeatsTable.table {
+        width: auto !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+        -khtml-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+    }
+
+        #SeatsTable.table > tbody > tr > td {
+            min-width: 50px !important;
+            width: 70px;
+            max-width: 70px;
+            height: 70px !important;
+            text-align: center !important;
+            align-content: center !important;
+            vertical-align: middle !important;
+            border-left: 1px solid black;
+            padding: 0px !important;
+            border-top-color: black !important;
+            /*-webkit-touch-callout: none;
+            -webkit-user-select: none;
+            -khtml-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;*/
+        }
+
+            #SeatsTable.table > tbody > tr > td:last-child {
+                border-right: 1px solid black !important;
+            }
+
+        #SeatsTable.table > tbody > tr:last-child > td {
+            border-bottom: 1px solid black !important;
+        }
+
+#Seats {
+    padding-top: 10px !important;
+}
+
+#SeatsTable ul.SeatsCategory {
+    list-style-type: none !important;
+    display: flex !important;
+    flex-direction: row !important;
+    margin: 0 auto !important;
+    padding: 0px !important;
+    padding-top: 10px !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+    #SeatsTable ul.SeatsCategory > li {
+        display: block !important;
+        padding: 10px !important;
+        margin-right: 2px !important;
+        cursor: move !important;
+        min-width: 100px !important;
+        text-align: center !important;
+        border: 1px solid black !important;
+        -webkit-touch-callout: none !important;
+        -webkit-user-select: none !important;
+        -khtml-user-select: none !important;
+        -moz-user-select: none !important;
+        -ms-user-select: none !important;
+        user-select: none !important;
+    }
+
+    #SeatsTable ul.SeatsCategory li[data-colour="silver"],
+    #SeatsTable silver {
+        color: #2a2a2a !important;
+        background-color: silver !important;
+    }
+
+    #SeatsTable ul.SeatsCategory li[data-colour="gold"],
+    #SeatsTable gold {
+        color: #462710 !important;
+        background-color: gold !important;
+    }
+
+    #SeatsTable ul.SeatsCategory li[data-colour="platinum"],
+    #SeatsTable platinum {
+        color: #2a2a2a !important;
+        background-color: #e5e4e2 !important;
+    }
+
+#SeatsTable td > cycle,
+#SeatsTable td > silver,
+#SeatsTable td > gold,
+#SeatsTable td > platinum {
+    width: 100% !important;
+    height: 100% !important;
+    display: table !important;
+    -webkit-touch-callout: none !important;
+    -webkit-user-select: none !important;
+    -khtml-user-select: none !important;
+    -moz-user-select: none !important;
+    -ms-user-select: none !important;
+    user-select: none !important;
+}
+
+#SeatsTable silver > div,
+#SeatsTable gold > div,
+#SeatsTable platinum > div {
+    width: 100% !important;
+    height: 100% !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+    display: table-cell !important;
+}
+
+#SeatsTable cycle {
+    background-color: white !important;
+}
+
+#SeatsTable .undermaintenance {
+    background-color: gray !important;
+    filter: invert(1) !important;
+    -webkit-filter: invert(1) !important;
+    -ms-filter: invert(1) !important;
+}
+
+#SeatsTable cycle > div {
+    width: 100% !important;
+    height: 100% !important;
+    text-align: center !important;
+    vertical-align: top !important;
+    padding-top: 5px !important;
+    display: table-cell !important;
+    color: black !important;
+    /*background-image: url("/images/cycle.png");
+            background-repeat: no-repeat;
+            background-size: 70%;
+            background-position: 7px 12px;*/
+}
+
+    #SeatsTable cycle > div > input[type="number"] {
+        color: black !important;
+        min-width: 20px !important;
+        width: 80%;
+        max-width: 60px !important;
+        min-height: 25px !important;
+        max-height: 25px !important;
+        padding: 0px !important;
+        background-color: #efefef !important;
+        border: 0px solid transparent;
+    }
+
+        #SeatsTable cycle > div > input[type="number"]:focus {
+            outline: none !important;
+        }
+
+    #SeatsTable cycle > div > div {
+        display: flex !important;
+        height: 55% !important;
+        width: 100% !important;
+        background-image: url("/images/cycle.png") !important;
+        background-repeat: no-repeat !important;
+        background-size: 70% !important;
+        background-position: center center !important;
+    }
+
+#SeatsTable fan,
+#SeatsTable tv,
+#SeatsTable speaker,
+#SeatsTable instructor
+{
+    display: flex;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+}
+
+#MatrixData {
+    margin-top: 10px !important;
+    font-family: Consolas, "Liberation Mono", Menlo, Courier, monospace !important;
+}
+
+.hasError {
+    border: 1px solid red !important;
+}
+/**********End of RoomLayout Page css*/
+
+.displayInlineBlock{
+    display:inline-block !important;
+    margin-left:10px !important;
+}
+
+/*********Loader from w3Schools*******/
+.loader {
+    border: 16px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 16px solid blue;
+    border-right: 16px solid green;
+    border-bottom: 16px solid red;
+    border-left: 16px solid pink;
+    width: 120px;
+    height: 120px;
+    -webkit-animation: spin 2s linear infinite;
+    animation: spin 2s linear infinite;
+}
+
+@-webkit-keyframes spin {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+/********************/
+
+@media print {
+    * {
+        -webkit-print-color-adjust: exact;
+    }
+}

@@ -1,0 +1,76 @@
+﻿<div class="container-fluid">
+    <div class="row" style="margin-bottom:10px;">
+        <div style="padding:0px;width:auto;float:left;">
+            <button id="AddInstructorBtn" type="button" class="btn btn-block btn-primary "><i class="fa fa-plus"></i> Add New Instructor</button>
+        </div>
+    </div>
+    <div class="row">
+        <table id="instructorsTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Email</th>
+                    <th>Designation</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#instructorsTable').DataTable().clear();
+        $('#instructorsTable').DataTable().destroy();
+        $("#instructorsTable tbody")
+            .off("click", "tr td button.editInstructor");
+
+        function loadData() {
+            var ins_table=$('#instructorsTable').DataTable({
+                "lengthMenu": [[5, 10, 25, 50], [5, 10, 25, 50]],
+                destroy:true,
+                "pagination": true,
+                "autoWidth": false,
+                "responsive": true,
+                "processing": true,
+                "serverSide": true,
+                "deferLoading": 0,
+                "search": {
+                    "search": ""
+                },
+                'ajax': { "url": '@Url.Action("getinstructors", "admin")', "type": "POST" },
+                'columns': [
+                    { "data": "firstName" },
+                    { "data": "lastName" },
+                    { "data": "email" },
+                    { "data": "bio" },
+                    {
+                        data: "userID",
+                        render: function (data, type, row) {
+                            return "<button class=\"editInstructor btn btn-info btn-flat\" data-i='"+data+"'><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></button>";
+                        }
+                    }
+                ]
+            });
+        }
+        loadData();
+
+
+        $("#AddInstructorBtn").click(function () {
+            $("#instructors").load("@Url.Action("addinstructor", "admin")");
+        });
+
+        $('#instructorsTable tbody').on('click', 'tr td button.editInstructor', function () {
+            var ins = $(this).data("i");
+            $.ajax({
+                url: '@Url.Action("updateInstructor", "admin")',
+                method: 'GET',
+                data: { instructorID: ins },
+                success: function (data) {
+                    $("#instructors").html(data);
+                }
+
+            })
+        });
+    });
+</script>

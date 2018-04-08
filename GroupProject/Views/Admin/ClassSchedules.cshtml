@@ -1,0 +1,189 @@
+﻿<script type="text/javascript">
+    var layouts = @Json.Serialize(ViewBag.RoomLayouts);
+</script>
+<div class="box box-info">
+    <div class="box-header with-border">
+        <h3 class="box-title"><b>Schedules</b></h3>
+    </div>
+    <div class="box-body" style="min-height:700px;">
+        <div id="classSchedules">
+            <div class="container-fluid">
+                <div class="row" style="margin-bottom:10px;">
+                    <div style="padding:0px;width:auto;float:left;">
+                        <button id="AddClassScheduleBtn" type="button" class="btn btn-block btn-primary "><i class="fa fa-plus"></i> Add New Class Schedule</button>
+                    </div>
+                    <div style="padding:0px;width:auto;float:right;">
+                        <button data-toggle="modal" data-target="#saveClassScheduleChangesModal" data-backdrop="false" type="button" class="btn btn-block btn-primary " style="float:right;max-width:180px;"><i class="fa fa-save"></i>  Save Changes</button>
+                    </div>
+                </div>
+                <div class="row">
+                    <table id="classSchedulesTable" class="table table-bordered table-striped">
+                        <thead>
+                            <tr>
+                                <th>Schedule Name</th>
+                                <th>Class Type</th>
+                                <th>Days</th>
+                                <th>Schedule</th>
+                                <th>Timings</th>
+                                <th>Staff</th>
+                                <th>Location</th>
+                                <th>Room Layout</th>
+                            </tr>
+                        </thead>
+                    </table>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+    <!-- /.box-body -->
+</div>
+<div class="modal modal-info fade" id="saveClassScheduleChangesModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">Save Class Schedule Changes Confirmation</h4>
+            </div>
+            <div class="modal-body">
+                <h4>Do you want to verify the information, or continue saving the changes?</h4>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="VerifyBtn" class="btn btn-outline pull-left" data-dismiss="modal"><i class="fa  fa-angle-double-left"></i><div>Verify</div></button>
+                <button id="SaveClassScheduleChanges" type="button" class="btn btn-outline"><i class="fa fa-check"></i><div>Save changes</div></button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.box -->
+<script type="text/javascript" src="~/lib/select2/dist/js/select2.full.min.js"></script>
+<script type="text/javascript">
+    $('#classSchedulesTable').DataTable().clear();
+    $('#classSchedulesTable').DataTable().destroy();
+
+    $('.select2ctrl').select2();
+    var ins_table = null;
+    function loadData() {
+        $('.select2ctrl').select2('destroy');
+        ins_table = $('#classSchedulesTable').DataTable({
+            "lengthMenu": [[5, 10, 25, 50], [5, 10, 25, 50]],
+            destroy:true,
+            "pagination": true,
+            "autoWidth": false,
+            "responsive": true,
+            "processing": true,
+            "serverSide": true,
+            "deferLoading": 0,
+            "search": {
+                "search": ""
+            },
+            'ajax': { "url": '@Url.Action("getclassschedules", "admin")', "type": "POST" },
+            'columns': [
+                    { "data": "scheduleName" },
+                {data: "classType.className"},
+                { "data": "days" },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return row['startDate'].split('T')[0] + ' to ' + row['endDate'].split('T')[0];
+                    }
+
+                },
+                {
+                    data: null,
+                    render: function (data, type, row) {
+                        return row['startTime'].split('T')[0] + ' to ' + row['endTime'].split('T')[0];
+                    }
+
+                },
+                {
+                    data: "classType",
+                    render: function (data, type, row)
+                    {
+                        return data.instructor.firstName + " " + data.instructor.lastName;
+
+                    }
+                },
+                {"data": "classType.location.locationName"},
+                {
+                    data: "roomLayout",
+                    render: function (data, type, row)
+                    {
+                        var locationID = 0;
+                        if (data != null)
+                            locationID = data.locationID;
+                        var LocationFilter = $(layouts).filter(function (index) {
+                            return layouts[index].locationID == locationID;
+                        });
+                        var selectComponent = "<select type=\"text\" class=\"select2ctrl form-control\" style=\"min-width:100%;witdh:100%;\" data-id=\"" + row.classScheduleID + "\">";
+                        if (row.roomLayoutID == 0) {
+                            selectComponent += "<option value=\"" + 0 + "\" selected>None</option>";
+                        }
+                        else {
+                            selectComponent += "<option value=\"" + 0 + "\" >None</option>";
+                        }
+                        $.each(LocationFilter, function (index, element) {
+                            if (row.roomLayoutID == element.roomLayoutID) {
+                                selectComponent += "<option value=\"" + element.roomLayoutID + "\" selected>" + element.roomName + "</option>";
+                            }
+                            else {
+                                selectComponent += "<option value=\"" + element.roomLayoutID + "\">" + element.roomName + "</option>";
+                            }
+                        });
+                        selectComponent += "</select>";
+                        return selectComponent;
+
+                    }
+                }
+            ],
+            "drawCallback": function (settings) {
+                $('.select2ctrl').select2();
+            }
+        });
+    }
+    loadData();
+
+
+    $("#AddClassScheduleBtn").click(function () {
+        $("#classSchedules").load("@Url.Action("addClassSchedule", "admin")");
+    });
+
+    $("#SaveClassScheduleChanges").click(function () {
+        $("#VerifyBtn").attr("disabled", "disabled");
+        $("#SaveClassScheduleChanges").attr("disabled", "disabled");
+        $("#SaveClassScheduleChanges i").removeClass("fa-check");
+        $("#SaveClassScheduleChanges i").addClass("fa-spinner fa-pulse fa-fw");
+        $("#SaveClassScheduleChanges div").text("Saving Changes");
+        var inputData = new Object();
+        var rows = $(ins_table.rows().nodes()).find("td select");
+        var ErrorFlag = false;
+        $(rows).each(function (index, element) {
+            //var object = {
+            //    classScheduleID: $(element).data("id"),
+            //    RoomLayoutID: $(element).val()
+            //};
+            inputData[$(element).data("id")] = $(element).val()
+            //inputData.push(object);
+        });
+        $.ajax({
+            url: "@Url.Action("saveClassScheduleChanges", "admin")",
+            method: 'POST',
+            data: inputData,
+            async: true,
+            success: function (data) {
+                if (data == true) {
+                    $("#SaveClassScheduleChanges i").removeClass("fa-spinner fa-pulse fa-fw");
+                    $("#SaveClassScheduleChanges i").addClass("fa-check");
+                    $("#SaveClassScheduleChanges div").text("Saved Changes");
+                    $("#SaveClassScheduleChanges").removeAttr("disabled");
+                    $("#VerifyBtn").removeAttr("disabled");
+                }
+            }
+        });
+
+    });
+</script>

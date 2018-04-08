@@ -1,0 +1,82 @@
+﻿<div class="container-fluid">
+    <div class="row" style="margin-bottom:10px;">
+        <div style="padding:0px;width:auto;float:left;">
+            <button id="AddRoomLayoutBtn" type="button" class="btn btn-block btn-primary "><i class="fa fa-plus"></i> Add New Room Layout</button>
+        </div>
+    </div>
+    <div class="row">
+        <table id="roomLayoutsTable" class="table table-bordered table-striped">
+            <thead>
+                <tr>
+                    <th>Room Name</th>
+                    <th>Location</th>
+                    <th>Configured Seats</th>
+                    <th>Max Seats</th>
+                    <th>Edit</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#roomLayoutsTable').DataTable().clear();
+        $('#roomLayoutsTable').DataTable().destroy();
+        $("#roomLayoutsTable tbody")
+            .off("click", "tr td button.editRoomLayout");
+
+        function loadData() {
+            var ins_table = $('#roomLayoutsTable').DataTable({
+                "lengthMenu": [[5, 10, 25, 50], [5, 10, 25, 50]],
+                destroy:true,
+                "pagination": true,
+                "autoWidth": false,
+                "responsive": true,
+                "processing": true,
+                "serverSide": true,
+                "deferLoading": 0,
+                "search": {
+                    "search": ""
+                },
+                'ajax': { "url": '@Url.Action("getroomlayouts", "admin")', "type": "POST" },
+                'columns': [
+                    { "data": "roomName" },
+                    {
+                        data: "location",
+                        render: function (data, type, row) {
+                            return data.locationName;
+                        }
+
+                    },
+                    { "data": "configuredSeats" },
+                    { "data": "maxSeats" },
+                    {
+                        data: "roomLayoutID",
+                        render: function (data, type, row) {
+                            return "<button class=\"editRoomLayout btn btn-info btn-flat\" data-i='"+data+"'><i class=\"fa fa-pencil\" aria-hidden=\"true\"></i></button>";
+                        }
+                    }
+                ]
+            });
+        }
+        loadData();
+
+
+        $("#AddRoomLayoutBtn").click(function () {
+            $("#roomLayouts").load("@Url.Action("addRoomLayout", "admin")");
+        });
+
+        $('#roomLayoutsTable tbody').on('click', 'tr td button.editRoomLayout', function () {
+            var c_id = $(this).data("i");
+            $.ajax({
+                url: '@Url.Action("updateRoomLayout", "admin")',
+                method: 'GET',
+                data: { roomLayoutID: c_id },
+                success: function (data) {
+                    $("#roomLayouts").html(data);
+                }
+
+            })
+        });
+    });
+</script>
