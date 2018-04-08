@@ -27,13 +27,3 @@ MySQL
 * Writing tests
 * Code review
 * Other guidelines
-
-### Who do I talk to? ###
-
-* Repo owner or admin
-Owner:
-Scott Ha
-ha_scott@yahoo.com
-* Other community or team contact
-
-Other Members:
